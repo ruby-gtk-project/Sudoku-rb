@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require "sudoku"
+
+Sudoku::Application.new.build.run
