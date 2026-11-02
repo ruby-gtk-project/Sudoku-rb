@@ -13,12 +13,15 @@ The port is a gem (`sudoku-rb`, `module Sudoku`), so port files live at
 
 ## Status summary
 
-Nothing user-facing is ported yet. `lib/sudoku/application.rb` holds a
-placeholder `Adwaita::StatusPage` reading "The Ruby port has not been written
-yet"; `lib/sudoku.rb` requires it and `exe/sudoku` runs it. Every component
-below is **missing** except the application shell, which exists as a stub.
+Every user-facing component now has a port file on `ruby` (commit *Port the
+game core, window, pages and dialogs from upstream*). All 13 component
+sections below are **present**; what remains is parity auditing inside each
+file, not missing files.
 
-Totals: 13 components, 1 partially present (the application class), 12 absent.
+Totals: 13 components, 13 present, 0 absent. The one axis still entirely
+unported is the translation catalogue — this fork has no `po/` directory, so
+all 5 upstream catalogues (de, fa, nl, vi, zh) and the `.pot` are missing and
+every string in `lib/` is an untranslated literal.
 
 ---
 
@@ -36,9 +39,9 @@ entry points for How to Play and the shortcuts window. Not a widget.
 | Signals | `activate` → raise or create `SudokuWindow` |
 | Notes | Actions are built in a loop from a dict, so the names are not literals in the source — all five app action names are listed above. `generate_debug_info` reports system, distro, Python, GTK, Adwaita and PyGObject versions plus captured logs; the Ruby port must substitute `Gtk::Version` (there is no `Gtk::VERSION`) and its own runtime facts. `Adwaita::Application` is broken in the Ruby bindings — the port keeps `Gtk::Application` with an `Adwaita::ApplicationWindow`, as the existing stub already does. |
 
-**Port:** `lib/sudoku/application.rb` — **exists as a stub**, has the
-`Gtk::Application` + window shell and none of the actions, accelerators or the
-About dialog.
+**Port:** `lib/sudoku/application.rb` — **present** (142 lines): the
+`Gtk::Application`, the five app actions, the accelerator table and the
+`Adwaita::AboutDialog` with generated debug info.
 
 Repeaters: none. Conditional: the distro line only on Linux; release notes only
 when a metainfo file for the running version is installed.
@@ -83,7 +86,7 @@ breakpoints and the window actions.
 `win.show-preferences` and "Auto Pencil Marks" → `win.auto-pencil-marks`; then
 "How To Play" → `app.how_to_play` and "About Sudoku" → `app.about`.
 
-**Port:** `lib/sudoku/window.rb` — **missing**.
+**Port:** `lib/sudoku/window.rb` — **present** (504 lines — ToolbarView, header bar, page stack, primary menu, three breakpoints and the five window actions).
 
 Repeaters: the stack's pages are fixed; the five window actions and the three
 breakpoints are loop-built. Conditional: `continue_button` visibility on
@@ -108,7 +111,7 @@ Built entirely in source; no blueprint.
 | `Gtk.CheckButton` | 6 | `radio` | `toggled` → `_on_radio_toggled` | grouped per list; "Classic Sudoku"/"Diagonal Sudoku" (default classic) and "Easy"/"Medium"/"Hard"/"Extreme" (default Easy = 0.2) |
 | `Gtk.Button` | 1 | `pill`, `suggested-action` | `clicked` → `_on_confirm_clicked` | "Start Game", centred; calls back with (variant, difficulty) and closes |
 
-**Port:** `lib/sudoku/game_setup_dialog.rb` — **missing**.
+**Port:** `lib/sudoku/game_setup_dialog.rb` — **present** (160 lines — both radio lists and the pill Start Game button).
 
 Repeaters: `_create_radio_list` is a shared factory called twice and producing
 6 rows and 6 check buttons — the scan sees one of each.
@@ -126,7 +129,7 @@ Reached by `win.show-preferences` (`<primary>comma` or the primary menu), only
 when a controller exists. Its `auto_save_function` saves preferences, saves the
 board and refreshes the window subtitle.
 
-**Port:** `lib/sudoku/preferences_dialog.rb` — **missing**.
+**Port:** `lib/sudoku/preferences_dialog.rb` — **present** (56 lines).
 
 ---
 
@@ -163,7 +166,7 @@ number of mistakes").
 Variant keys: classic → `highlight_block`, `highlight_related_cells` (both on);
 diagonal adds `highlight_diagonals` (on).
 
-**Port:** `lib/sudoku/preferences_page.rb` — **missing**.
+**Port:** `lib/sudoku/preferences_page.rb` — **present** (167 lines — both loop-built groups and the SpinRow).
 
 Repeaters: both groups build every row in a loop over a dict — the row counts
 above are the live counts, not scan counts.
@@ -190,7 +193,7 @@ Six-page carousel reached by `app.how_to_play` / `F1` / the primary menu.
 | `Gtk.Button` | 2 | `circular` | `clicked` → `on_prev_clicked` / `on_next_clicked` | `prev` (`go-previous-symbolic`, tooltip "Previous", starts insensitive) and `next` (`go-next-symbolic`, tooltip "Next"); sensitivity recomputed from carousel position |
 | `Gtk.EventControllerKey` (controller) | 1 | — | `key-pressed` → `on_key_pressed` | Left/Right paginate, swapped under RTL |
 
-**Port:** `lib/sudoku/help_dialog.rb` — **missing**.
+**Port:** `lib/sudoku/help_dialog.rb` — **present** (240 lines — the six-page carousel, dots, nav buttons and key controller).
 
 Repeaters: the six carousel pages are literal in the blueprint, not looped.
 
@@ -208,7 +211,7 @@ backing source class; `app.shortcuts` loads it from the GResource with
 | `Adw.ShortcutsSection` | 4 | "Game", "Pencil", "Input", "General" (all with the `shortcut window` message context) |
 | `Adw.ShortcutsItem` | 10 | Game: Move Between Cells `Up Down Left Right`, Jump Between Blocks `<Primary>Up Down Left Right`. Pencil: Pencil Mode `P`, Auto Pencil Marks `<Shift>P`, Place Pencil Mark `<Primary>1...9`. Input: Open Number Pop-Up `Return`. General: Show Shortcuts `<Primary>question`, Back to Main Menu `<Primary>M`, How to Play `F1`, Quit `<Primary>Q <Primary>W` |
 
-**Port:** `lib/sudoku/shortcuts_dialog.rb` — **missing**.
+**Port:** `lib/sudoku/shortcuts_dialog.rb` — **present** (65 lines — hand-built sections and items).
 
 ---
 
@@ -223,7 +226,7 @@ backing source class; `app.shortcuts` loads it from the GResource with
 | `Gtk.Label` | 1 | `title-1` | — | `finished_label`, wrapped and centred, text "Puzzle Complete!" |
 | `Adw.StyleManager` (not a widget) | 1 | — | `notify::dark` → `_update_picture` | swaps the illustration with the system theme |
 
-**Port:** `lib/sudoku/finished_page.rb` — **missing**.
+**Port:** `lib/sudoku/finished_page.rb` — **present** (111 lines — including the dark/light illustration swap).
 
 Conditional: the dark/light illustration choice.
 
@@ -237,7 +240,7 @@ Structurally identical to the finished page: `Gtk.Box` root (`map` →
 reading "Game Over!". Shown when the mistake count exceeds the configured
 limit.
 
-**Port:** `lib/sudoku/game_over_page.rb` — **missing**.
+**Port:** `lib/sudoku/game_over_page.rb` — **present** (98 lines).
 
 ---
 
@@ -252,7 +255,7 @@ limit.
 
 Shown while the generator thread runs; the source class is empty.
 
-**Port:** `lib/sudoku/loading_screen.rb` — **missing**.
+**Port:** `lib/sudoku/loading_screen.rb` — **present** (66 lines).
 
 ---
 
@@ -274,7 +277,7 @@ Feedback classes are added and removed on a `GLib.timeout_add` (2000 ms for
 pencil conflicts, 4000 ms otherwise) — see `src/shared/utils.py`
 (`schedule_feedback_clear`, `clear_cell_feedback`).
 
-**Port:** `lib/sudoku/sudoku_cell.rb` — **missing**.
+**Port:** `lib/sudoku/sudoku_cell.rb` — **present** (257 lines — the cell button, overlay, notes grid and the feedback-class timeouts folded in from src/shared/utils.py).
 
 Repeaters: the cell itself (81 per board) and its note labels (up to 9 per
 cell). All five feedback classes are applied from variables, so none appears in
@@ -296,7 +299,7 @@ Builds the widget tree the game is played on and appends it to the window's
 | `Gtk.EventControllerKey` (controller) | 81 | — | `key-pressed` → `on_key_pressed(row, col)` | one per cell |
 | `SudokuCell` | 81 | see above | — | attached into its block at its inner row/column |
 
-**Port:** `lib/sudoku/grid_manager.rb` — **missing**.
+**Port:** `lib/sudoku/grid_manager.rb` — **present** (155 lines — the aspect frame, parent grid, 9 blocks, 81 cells and their controllers).
 
 Repeaters: the 9 blocks, the 81 cells and the 162 controllers are all built in
 nested loops — the scan sees one of each. Rebuilding tears the old tree down
@@ -317,7 +320,7 @@ and cancels every pending feedback timeout.
 | `Gtk.Button` ("Done") | 0–1 | — | `clicked` → popdown | only in pencil mode or on a right-click; tooltip "Finish Editing Cell" |
 | `Gtk.EventControllerKey` (controller) | 1 | — | `key-pressed` | 1–9 click the matching number button, Backspace/Delete click Clear |
 
-**Port:** `lib/sudoku/popover_manager.rb` — **missing**.
+**Port:** `lib/sudoku/popover_manager.rb` — **present** (292 lines — the number grid, remaining-count badges, Clear and Done).
 
 Repeaters: the nine number buttons and their badges are loop-built.
 Conditional: the badges, the insensitive state, and the Done button.
@@ -336,7 +339,7 @@ every board interaction is defined here.
 | RTL | Left/Right are mirrored when the window direction is RTL |
 | Pointer | Only buttons 1 and 3 act; right-click writes a pencil mark; a click arriving while the other button is held is discarded as a ghost click |
 
-**Port:** `lib/sudoku/input_handler.rb` — **missing**.
+**Port:** `lib/sudoku/input_handler.rb` — **present** (269 lines — the full key map, RTL mirroring and ghost-click filtering).
 
 ---
 
@@ -387,10 +390,16 @@ its own port file:
 7. **`Adwaita::Application` is unusable in the Ruby bindings**, so the port
    cannot subclass it the way upstream subclasses `Adw.Application`; the app
    actions and accelerators must be installed on a `Gtk::Application`.
-8. **`Adw.ShortcutsDialog` is recent libadwaita (1.8+).** Whether the
-   installed Adwaita in the dev shell exposes it needs checking before
-   `lib/sudoku/shortcuts_dialog.rb` is written; otherwise the section/item
-   tree has to be hand-built.
+8. **`Adw.ShortcutsDialog` is recent libadwaita (1.8+).** Resolved: the
+   section/item tree is hand-built in `lib/sudoku/shortcuts_dialog.rb`.
 9. **Threaded generation.** Upstream generates on a `threading.Thread` and
    returns to the main loop via `GLib.idle_add`. The port needs the equivalent
    (`GLib::Idle.add` from a Ruby thread) or the loading screen is pointless.
+10. **Translations are entirely unported.** There is no `po/` directory on
+    `ruby`: no `.pot`, none of the 5 upstream catalogues, and no gettext call
+    in `lib/` — every user-visible string is a bare Ruby literal. This is the
+    only component axis with nothing ported at all, and it is the next unit of
+    work after per-file parity auditing.
+11. **Assets are partially ported.** `data/illustrations` and `data/icons`
+    exist in the fork; the stylesheets are ported as Ruby in
+    `lib/sudoku/style.rb` rather than loaded as CSS assets.
