@@ -2,6 +2,7 @@
 
 require "gtk4"
 require "adwaita"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/screens/finished_page.py and
@@ -13,8 +14,9 @@ module Sudoku
   # changes, as upstream does.
   class FinishedPage < Gtk::Box
     type_register
+    include Gettext
 
-    VICTORY_MESSAGE = "Puzzle Complete!"
+    VICTORY_MESSAGE = _("Puzzle Complete!")
     DARK_PICTURE = "puzzle-complete-celebration-dark.svg"
     LIGHT_PICTURE = "puzzle-complete-celebration-light.svg"
 

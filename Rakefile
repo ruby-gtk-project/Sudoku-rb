@@ -70,6 +70,126 @@ end
 desc "Generate YARD documentation"
 task docs: "yard"
 
+# kettle-jem:freeze
+### TRANSLATION TASKS
+# po/ holds the gettext catalogue Sudoku::Translations reads at runtime.
+# Upstream regenerates it through meson (scripts/update-po.sh drives
+# `ninja sudokugame-update-po`); here the two steps are rake tasks.
+#
+# Both need the dev shell: rxgettext is the gettext gem's extractor — the only
+# one that understands Ruby — and msgcat/msgmerge are GNU gettext.
+#   nix develop --command rake pot
+#   nix develop --command rake po
+TEXTDOMAIN = "sudokugame"
+PO_DIR = File.join(__dir__, "po")
+POT_PATH = File.join(PO_DIR, "#{TEXTDOMAIN}.pot")
+# The gem's version, read rather than required: requiring it would pull the app
+# in, and with it gtk4.
+POT_VERSION = File.read(File.join(__dir__, "lib/sudoku/rb/version.rb"))[/VERSION = "([^"]+)"/, 1]
+
+# rxgettext ships with the gettext gem, which is not in this project's bundle:
+# rake runs with GEM_PATH narrowed to the app's own gems, BUNDLE_GEMFILE
+# pointed at their lockfile and BUNDLER_SETUP making every child process load
+# bundler again, and under that environment the extractor cannot even be
+# found. Clearing the lot hands each tool the plain dev shell it is installed
+# into.
+def unbundled_env
+  ENV.keys.grep(/\ABUNDLER?_/).to_h { |name| [name, nil] }
+    .merge("RUBYOPT" => nil, "RUBYLIB" => nil, "GEM_HOME" => nil, "GEM_PATH" => nil)
+end
+
+def gettext_sh(*command)
+  puts(command.join(" "))
+  system(unbundled_env, *command) || raise("#{command.first} failed")
+end
+
+# A list file — POTFILES or LINGUAS — as its entries, without the comments and
+# blank lines both allow.
+def gettext_list(name)
+  File.readlines(File.join(PO_DIR, name), chomp: true)
+    .map { |line| line.sub(/#.*/, "").strip }
+    .reject(&:empty?)
+end
+
+desc "Extract po/#{TEXTDOMAIN}.pot from the sources listed in po/POTFILES"
+task :pot do
+  require "tmpdir"
+  Dir.mktmpdir do |dir|
+    extracted = File.join(dir, "#{TEXTDOMAIN}.pot")
+    gettext_sh(
+      "rxgettext",
+      "--no-wrap",
+      "--sort-by-file",
+      "--package-name=#{TEXTDOMAIN}",
+      "--package-version=#{POT_VERSION}",
+      "--copyright-holder=sepehr-rs",
+      "--copyright-year=2025",
+      "--output=#{extracted}",
+      *gettext_list("POTFILES"),
+    )
+    # rxgettext writes an empty "#:" line before each reference block and
+    # spells every reference as a path relative to its own working directory;
+    # and it fills Plural-Forms in with the placeholders msgfmt rejects, for a
+    # catalogue whose sources mark no plural message at all.
+    File.write(
+      extracted,
+      File.read(extracted)
+        .gsub(/^#:[ \t]*\n/, "")
+        .sub(/^"Plural-Forms: .*\n/, "")
+        .lines
+        .map { |line| line.start_with?("#: ") ? line.gsub(%r{\S*#{Regexp.escape(__dir__)}/}, "") : line }
+        .join,
+    )
+    # msgcat rewraps at word boundaries, which rxgettext does not.
+    gettext_sh(
+      "msgcat",
+      "--width=78",
+      "--output-file=#{POT_PATH}",
+      extracted,
+    )
+  end
+end
+
+desc "Merge po/#{TEXTDOMAIN}.pot into every language listed in po/LINGUAS"
+task po: :pot do
+  gettext_list("LINGUAS").each do |language|
+    catalogue = File.join(PO_DIR, "#{language}.po")
+    if File.exist?(catalogue)
+      # No fuzzy matching: a guess drawn from a similar message reads as a
+      # translation in every tool that shows the file, and the guesses this
+      # catalogue drew were wrong often enough to be worse than nothing. A
+      # message either keeps the translation it had or goes back to the
+      # translators untranslated.
+      gettext_sh(
+        "msgmerge",
+        "--quiet",
+        "--update",
+        "--backup=none",
+        "--no-fuzzy-matching",
+        "--width=78",
+        catalogue,
+        POT_PATH,
+      )
+    else
+      gettext_sh(
+        "msginit",
+        "--no-translator",
+        "--locale=#{language}",
+        "--input=#{POT_PATH}",
+        "--output-file=#{catalogue}",
+      )
+    end
+    gettext_sh(
+      "msgfmt",
+      "--check",
+      "--statistics",
+      "--output-file=#{File::NULL}",
+      catalogue,
+    )
+  end
+end
+# kettle-jem:unfreeze
+
 # simplecov:disable
 ### MONOREPO FAMILY TASKS
 if Dir.exist?(File.join(__dir__, "gems"))

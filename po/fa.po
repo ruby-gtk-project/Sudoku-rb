@@ -1,0 +1,520 @@
+# Persian translations for sudokugame package.
+# Copyright (C) 2025 THE sudokugame'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the sudokugame package.
+# sobhan <sobhan@misano>, 2025.
+# میر سبحان <me@mirsobhan.ir>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sudokugame\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 00:04+0000\n"
+"PO-Revision-Date: 2025-08-19 03:41+0330\n"
+"Last-Translator: میر سبحان <me@mirsobhan.ir>\n"
+"Language-Team: Persian\n"
+"Language: fa\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Gtranslator 48.0\n"
+
+#: lib/sudoku/finished_page.rb:19
+msgid "Puzzle Complete!"
+msgstr ""
+
+#: lib/sudoku/game_over_page.rb:18
+msgid "Game Over!"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:22
+msgid "Classic Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:23
+msgid "Diagonal Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:27 lib/sudoku/window.rb:28
+msgid "Easy"
+msgstr "آسان"
+
+#: lib/sudoku/game_setup_dialog.rb:28 lib/sudoku/window.rb:29
+msgid "Medium"
+msgstr "میانه"
+
+#: lib/sudoku/game_setup_dialog.rb:29 lib/sudoku/window.rb:30
+msgid "Hard"
+msgstr "سخت"
+
+#: lib/sudoku/game_setup_dialog.rb:30 lib/sudoku/window.rb:31
+msgid "Extreme"
+msgstr "شدید"
+
+#: lib/sudoku/game_setup_dialog.rb:45 lib/sudoku/window.rb:303
+msgid "New Game"
+msgstr "بازی جدید"
+
+#: lib/sudoku/game_setup_dialog.rb:100
+msgid "Start Game"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:21
+msgid "The Basics"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:22
+msgid ""
+"The board is a 9×9 grid, divided into nine 3×3 blocks. Fill every cell with "
+"numbers from 1 to 9."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:27
+msgid "Rows & Columns"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:28
+msgid "Each row and column must contain unique numbers without duplicates."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:32
+msgid "Blocks Matter"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:33
+msgid ""
+"Each 3×3 block must also contain the numbers 1 through 9, without repeats."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:37
+msgid "Casual Mode"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:38
+msgid ""
+"Turn on Casual Mode in Preferences to check your entries against the "
+"solution. When off, only rule violations are flagged, not incorrect numbers."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:43
+msgid "Mistakes Happen"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:44
+msgid "Mistakes are highlighted in red so you can spot them easily."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:48
+msgid "Make Notes"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:49
+msgid "Use pencil mode to note possible numbers for a cell."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:132
+msgid "Previous"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:145
+msgid "Next"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:278
+msgid "Clear"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:281
+msgid "Clear Cell (Del/Backspace)"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:287
+msgid "Done"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:290
+msgid "Finish Editing Cell"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:24
+msgctxt "shortcut window"
+msgid "Game"
+msgstr "بازی"
+
+#: lib/sudoku/shortcuts_dialog.rb:26
+msgctxt "shortcut window"
+msgid "Move Between Cells"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:27
+msgctxt "shortcut window"
+msgid "Jump Between Blocks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:31
+msgctxt "shortcut window"
+msgid "Pencil"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:33
+msgctxt "shortcut window"
+msgid "Pencil Mode"
+msgstr "حالت مداد"
+
+#: lib/sudoku/shortcuts_dialog.rb:34
+msgctxt "shortcut window"
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:35
+msgctxt "shortcut window"
+msgid "Place Pencil Mark"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:39
+msgctxt "shortcut window"
+msgid "Input"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:41
+msgctxt "shortcut window"
+msgid "Open Number Pop-Up"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:45
+msgctxt "shortcut window"
+msgid "General"
+msgstr "عمومی"
+
+#: lib/sudoku/shortcuts_dialog.rb:47
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "نمایش میانبرها"
+
+#: lib/sudoku/shortcuts_dialog.rb:48
+msgctxt "shortcut window"
+msgid "Back to Main Menu"
+msgstr "بازگشت به فهرست اصلی"
+
+#: lib/sudoku/shortcuts_dialog.rb:49
+msgctxt "shortcut window"
+msgid "How to Play"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:50
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "خروج"
+
+#: lib/sudoku/window.rb:68 lib/sudoku/window.rb:234
+msgid "Sudoku"
+msgstr "سودوکو"
+
+#: lib/sudoku/window.rb:239
+msgid "Back to Main Menu"
+msgstr "بازگشت به فهرست اصلی"
+
+#: lib/sudoku/window.rb:247
+msgid "Menu"
+msgstr "فهرست"
+
+#: lib/sudoku/window.rb:254
+msgid "Toggle Pencil Mode"
+msgstr "فعال/غیرفعال سازی حالت مداد"
+
+#: lib/sudoku/window.rb:296
+msgid "Continue Game"
+msgstr "ادامه بازی"
+
+#: lib/sudoku/window.rb:372
+msgid "Continue Saved Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:377
+msgid "Start a New Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:458
+msgid "Pencil Mode • Note possible numbers"
+msgstr ""
+
+#: lib/sudoku/window.rb:468
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: lib/sudoku/window.rb:470
+msgid "Preferences"
+msgstr ""
+
+#: lib/sudoku/window.rb:471
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/window.rb:473
+msgid "How To Play"
+msgstr ""
+
+#: lib/sudoku/window.rb:474
+msgid "About Sudoku"
+msgstr ""
+
+#~ msgid "Solve Sudoku puzzles"
+#~ msgstr "حل معماهای سودوکو"
+
+#~ msgid "Solve puzzles in style"
+#~ msgstr "حل معماها با سبکی خاص"
+
+#~ msgid ""
+#~ "Sudoku is a puzzle app that lets you solve classic number-placement "
+#~ "challenges. It features a clean, distraction-free design with a simple "
+#~ "interface to keep you focused and engaged."
+#~ msgstr ""
+#~ "سودوکو یه برنامه معماست که به شما اجازه می‌ده تا چالش های کلاسیک جایگشت "
+#~ "عددی رو حل کنید. با ارائه طراحی تمیز، بدون حواس‌پرتی با میانای ساده تا "
+#~ "شما درگیر و متمرکز بمانید."
+
+#~ msgid "Features:"
+#~ msgstr "ویژگی‌ها:"
+
+#~ msgid "Modern GTK4 and libadwaita interface"
+#~ msgstr "رابط مدرن GTK4 و libadwaita"
+
+#~ msgid "Keyboard shortcuts for quick access to all functions"
+#~ msgstr "میانبر صفحه‌کلید برای دسترسی سریع به همه عملکردها"
+
+#~ msgid "Save and load games seamlessly to continue your progress anytime"
+#~ msgstr ""
+#~ "بازی هارا بی‌وقفه ذخیره و بار کنید تا پیشرفت خود را در هر زمان ادامه دهید "
+
+#~ msgid "Highlight active row and cell to improve focus and ease of play"
+#~ msgstr ""
+#~ "برای افزایش تمرکز و راحتی در بازی، ردیف فعال و خانه انتخاب شده را برجسته "
+#~ "می‌شوند"
+
+#~ msgid ""
+#~ "Conflict highlighting to help identify mistakes, ideal for beginners"
+#~ msgstr ""
+#~ "برجسته‌سازی تضادها برای کمک به شناسایی اشتباهات، ایده‌آل برای مبتدی‌ها"
+
+#~ msgid "Suitable for all skill levels, from beginners to experts"
+#~ msgstr "مناسب برای همه سطوح مهارتی، از مبتدی تا حرفه‌ای"
+
+#~ msgid "Sudoku in light mode"
+#~ msgstr "سودوکو در حالت روشن"
+
+#~ msgid "Sudoku in dark mode"
+#~ msgstr "سودوکو در حالت تیره"
+
+#~ msgid "Sudoku landing page in dark mode"
+#~ msgstr "صفحه فرود سودوکو در حالت تیره"
+
+#~ msgid "Sudoku landing page in light mode"
+#~ msgstr "صفحه فرود سودوکو در حالت روشن"
+
+#~ msgid "sudoku"
+#~ msgstr "سودوکو"
+
+#~ msgid "puzzle"
+#~ msgstr "معما"
+
+#~ msgid "game"
+#~ msgstr "بازی"
+
+#~ msgid "logic"
+#~ msgstr "منطق"
+
+#~ msgid "numbers"
+#~ msgstr "اعداد"
+
+#~ msgid "SepehrRS"
+#~ msgstr "SepehrRS"
+
+#~ msgid "Fixed game not being remembered after re-opening Sudoku"
+#~ msgstr "ذخیره نشدن بازی ثابت بعد از باز کردن مجدد سودوکو"
+
+#~ msgid ""
+#~ "Also moved the Back to main menu button from the primary menu to the "
+#~ "headerbar"
+#~ msgstr "دکمه «بازگشت به فهرست اصلی» از فهرست اصلی به نوار سربرگ منتقل شد"
+
+#~ msgid "Updated completion screen and added a difficulty subtitle:"
+#~ msgstr ""
+#~ "صفحه اتمام بازی به‌روزرسانی شد و زیرعنوانی برای سطح سختی اضافه گردید."
+
+#~ msgid ""
+#~ "Completion screen now shows randomized messages with improved imagery"
+#~ msgstr "صفحه اتمام بازی حالا پیامهای تصادفی با تصاویر بهتر نمایش می‌دهد"
+
+#~ msgid "Added difficulty level as a subtitle in the header bar"
+#~ msgstr "سطح سختی به عنوان زیرتیتر در سربرگ اضافه شد"
+
+#~ msgid "Updated shortcuts:"
+#~ msgstr "میان‌برهای به‌روز شده:"
+
+#~ msgid "Added F10 as primary menu's shortcut"
+#~ msgstr "کلید F10 به عنوان میانبر فهرست اصلی اضافه شد"
+
+#~ msgid "Added Ctrl + w to close Sudoku"
+#~ msgstr "مهار + w برای بستن سودکو افزوده شد"
+
+#~ msgid ""
+#~ "Additionally, a logging issue when pencil mode was turned on/off is now "
+#~ "fixed."
+#~ msgstr ""
+#~ "مشکل ثبت رویداد هنگام روشن و خاموش کردن حالت مداد هم اکنون برطرف شده است"
+
+#~ msgid ""
+#~ "Enhanced screen reader support for Sudoku, making the game more "
+#~ "accessible and intuitive for players who rely on assistive technologies. "
+#~ "With these improvements, users can now:"
+#~ msgstr ""
+#~ "پشتیبانی بهبود یافته از صفحه‌خوان برای سودوکو، بازی را برای بازیکنانی که "
+#~ "به فناوریهای کمکی متکی‌اند، دسترسپذیرتر و شهودی‌تر کرده است. با این "
+#~ "پیشرفتها، کاربران اکنون میتوانند راحتتر در بازی حرکت کنند و اطلاعات لازم "
+#~ "را دریافت کنند:"
+
+#~ msgid ""
+#~ "Receive clear feedback on whether the number they entered is correct or "
+#~ "incorrect"
+#~ msgstr "دریافت بازخورد واضح درباره اینکه عدد وارد شده درست است یا غلط"
+
+#~ msgid "Navigate the Sudoku interface more easily and efficiently"
+#~ msgstr "حرکت در میانای کاربری سودوکو به‌طور آسانتر و مؤثرتر انجام می‌شود."
+
+#~ msgid ""
+#~ "Additionally, a visual bug affecting the pencil icon has been fixed."
+#~ msgstr "یک باگ تصویری که روی آیکون مداد تأثیر می‌گذاشت، اکنون رفع شده است."
+
+#~ msgid ""
+#~ "First stable release of Sudoku! A modern GTK4/libadwaita application for "
+#~ "playing Sudoku puzzles."
+#~ msgstr ""
+#~ "اولین نگارش پایدار از سودوکو! برنامه مدرن GTK4/libadwaita برای بازی "
+#~ "معما‌های سودوکو."
+
+#~ msgid "Back to main menu"
+#~ msgstr "بازگشت به فهرست اصلی"
+
+#~ msgid "Sudoku Game Icon"
+#~ msgstr "نقشک بازی سودوکو"
+
+#~ msgid "Play Sudoku"
+#~ msgstr "سودوکو بازی کنید"
+
+#~ msgid "_Continue Game"
+#~ msgstr "_ادامه بازی"
+
+#~ msgid "_New Game"
+#~ msgstr "_بازی جدید"
+
+#~ msgid "_Keyboard Shortcuts"
+#~ msgstr "_میان‌برهای صفحه‌کلید"
+
+#~ msgid "Keyboard shortcuts"
+#~ msgstr "میان‌برهای صفحه‌کلید"
+
+#~ msgid "How to play"
+#~ msgstr "راهنمای بازی"
+
+#~ msgid "_About"
+#~ msgstr "_درباره"
+
+#~ msgid "About"
+#~ msgstr "درباره\t"
+
+#~ msgid "_Quit"
+#~ msgstr "_خروج"
+
+#~ msgid "Quit"
+#~ msgstr "خروج"
+
+#~ msgid "Sudoku Master! You've solved the puzzle with perfect logic!"
+#~ msgstr "استاد سودوکو! با منطق بی‌نقص معما رو حل کردی!"
+
+#~ msgid "Incredible! Every number found its perfect place!"
+#~ msgstr "باورنکردنی! هر عدد سر جای درستش قرار گرفته!"
+
+#~ msgid "Brilliant deduction! You've conquered this Sudoku challenge!"
+#~ msgstr "نابغه! با استدلال بی‌نظیرت این چالش سودوکو رو فتح کردی!"
+
+#~ msgid "Perfect solution! Your logical thinking is outstanding!"
+#~ msgstr "راه‌حل بی‌نقص! تفکر منطقیت واقعاً عالیه!"
+
+#~ msgid "Amazing work! You've mastered the art of Sudoku!"
+#~ msgstr "کار فوق‌العاده‌ای کردی! هنر حل سودوکو رو به خوبی یاد گرفتی!"
+
+#~ msgid "Fantastic! Every row, column, and box is perfectly filled!"
+#~ msgstr "فوق‌العاده! هر ردیف، ستون و خانه دقیقاً پر شده!"
+
+#~ msgid "Outstanding! Your puzzle-solving skills are remarkable!"
+#~ msgstr "شکوهمند! مهارت‌هات تو حل معما واقعاً خیره‌کنندست!"
+
+#~ msgid "Excellent! You've completed the Sudoku with flying colors!"
+#~ msgstr "عالی! شما سودوکو را با رنگهای پرانرژی و کامل تموم کردی!"
+
+#~ msgid "Spectacular! Your mathematical reasoning is top-notch!"
+#~ msgstr "دیدنیه! استدلال ریاضیات واقعا سرآمده!"
+
+#~ msgid "Well done! You've proven yourself a Sudoku champion!"
+#~ msgstr "آفرین! تو یک قهرمان سودوکو هستی!"
+
+#~ msgid "Congratulations! You've solved the puzzle flawlessly!"
+#~ msgstr "تبریک! معمای بازی رو بی‌نقص حل کردی!"
+
+#~ msgid "Victory! Your strategic thinking led to perfect completion!"
+#~ msgstr "پیروزی! تفکر استراتژیکت باعث تکمیل بی‌نقص شد!"
+
+#~ msgid "Genius! You've mastered the Sudoku grid with precision!"
+#~ msgstr "نابغه‌ای! با دقت کامل، جدول سودوکو را تسلط پیدا کردی!"
+
+#~ msgid "Masterpiece! Every number placement was calculated perfectly!"
+#~ msgstr "شاهکار! هر جایگذاری عدد کاملاً حساب شده بود!"
+
+#~ msgid "Phenomenal! You've conquered this Sudoku with style!"
+#~ msgstr "فوقالعاده! تو با سبک توی این سودوکو پیروز شدی! "
+
+#~ msgid "Wrong"
+#~ msgstr "اشتباه"
+
+#~ msgid "Clear Cell"
+#~ msgstr "پاک‌سازی خانه"
+
+#~ msgid "How to Play Sudoku"
+#~ msgstr "چطور سودوکو بازی کنیم"
+
+#~ msgid "Welcome to Sudoku!"
+#~ msgstr "به سودوکو خوش‌آمدید"
+
+#~ msgid ""
+#~ "The goal is to fill the grid so that every row, column, and 3x3 box "
+#~ "contains the numbers 1 through 9 without repeats."
+#~ msgstr ""
+#~ "هدف این است که جدول را طوری پر کنی که در هر ردیف، ستون و کادر ۳×۳، اعداد "
+#~ "۱ تا ۹ بدون تکرار وجود داشته باشند. "
+
+#~ msgid "How to play:"
+#~ msgstr "نحوه بازی:"
+
+#~ msgid "– Click on an empty cell to select it."
+#~ msgstr "روی خانه خالی "
+
+#~ msgid "– Use your keyboard or pencil tool to input a number."
+#~ msgstr "- از صفحه‌کلید خود یا ابزار مداد استفاده کنید تا عددی وارد کنید."
+
+#~ msgid "– Use the pencil tool to make notes."
+#~ msgstr "- از ابزار مداد استفاده کنید تا یادداشت بردارید."
+
+#~ msgid "– Use the backspace key to clear a cell."
+#~ msgstr "کلید پس‌بر استفاد کنید تا یک خانه را خالی کنید"
+
+#~ msgid "– Try to solve the puzzle logically."
+#~ msgstr "- تلاش کنید برای حل معماها به‌طور منطقی"
+
+#~ msgid "Good luck and have fun!"
+#~ msgstr "موفق باشی و خوش‌ بگذره"
+
+#~ msgid "Select Difficulty"
+#~ msgstr "انتخاب سطح"
+
+#~ msgid "Start new game with {} difficulty"
+#~ msgstr "شروع بازی جدید با سطح {}"

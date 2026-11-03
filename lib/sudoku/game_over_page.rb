@@ -2,6 +2,7 @@
 
 require "gtk4"
 require "adwaita"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/screens/game_over_page.py and
@@ -12,8 +13,9 @@ module Sudoku
   # upstream has yet to draw the dark variant.
   class GameOverPage < Gtk::Box
     type_register
+    include Gettext
 
-    GAMEOVER_MESSAGE = "Game Over!"
+    GAMEOVER_MESSAGE = _("Game Over!")
     PICTURE = "puzzle-game-over.svg"
 
     # A Gtk::Box subclass registered through the Ruby bindings takes no

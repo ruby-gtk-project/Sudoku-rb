@@ -3,6 +3,7 @@
 require "gtk4"
 require_relative "preferences"
 require_relative "log_utils"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/shared/popover_manager.py.
@@ -12,6 +13,8 @@ module Sudoku
   # popover is parented to the grid rather than the cell, so it survives the
   # cell being re-focused and is thrown away whenever the grid is rebuilt.
   class PopoverManager
+    include Gettext
+
     BUTTON_SIZE = 40
     GRID_SPACING = 5
     NUMBERS = (1..9).freeze
@@ -272,19 +275,19 @@ module Sudoku
       end
 
       def clear_button(cell, popover)
-        Gtk::Button.new(label: "Clear").tap do |button|
+        Gtk::Button.new(label: _("Clear")).tap do |button|
           button.set_size_request(-1, BUTTON_SIZE)
           button.hexpand = true
-          button.tooltip_text = "Clear Cell (Del/Backspace)"
+          button.tooltip_text = _("Clear Cell (Del/Backspace)")
           button.signal_connect("clicked") { on_clear_selected(cell, popover) }
         end
       end
 
       def done_button(popover)
-        Gtk::Button.new(label: "Done").tap do |button|
+        Gtk::Button.new(label: _("Done")).tap do |button|
           button.set_size_request(-1, BUTTON_SIZE)
           button.hexpand = true
-          button.tooltip_text = "Finish Editing Cell"
+          button.tooltip_text = _("Finish Editing Cell")
           button.signal_connect("clicked") { popover.popdown }
         end
       end

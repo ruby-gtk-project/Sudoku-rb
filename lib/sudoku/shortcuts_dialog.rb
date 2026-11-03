@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "adwaita"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream data/blueprints/shortcuts-dialog.blp.
@@ -12,35 +13,41 @@ module Sudoku
   # (type registration is refused), so the dialog is assembled here and handed
   # back ready to present.
   module ShortcutsDialog
+    include Gettext
+
+    # Upstream's blueprint marks every one of these with C_("shortcut
+    # window", ...), so each carries that context into the catalogue — the
+    # context is spelled out at every call because that is what the extractor
+    # reads.
     SECTIONS = [
       [
-        "Game",
+        p_("shortcut window", "Game"),
         [
-          ["Move Between Cells", "Up Down Left Right"],
-          ["Jump Between Blocks", "<Primary>Up Down Left Right"],
+          [p_("shortcut window", "Move Between Cells"), "Up Down Left Right"],
+          [p_("shortcut window", "Jump Between Blocks"), "<Primary>Up Down Left Right"],
         ],
       ],
       [
-        "Pencil",
+        p_("shortcut window", "Pencil"),
         [
-          ["Pencil Mode", "P"],
-          ["Auto Pencil Marks", "<Shift>P"],
-          ["Place Pencil Mark", "<Primary>1...9"],
+          [p_("shortcut window", "Pencil Mode"), "P"],
+          [p_("shortcut window", "Auto Pencil Marks"), "<Shift>P"],
+          [p_("shortcut window", "Place Pencil Mark"), "<Primary>1...9"],
         ],
       ],
       [
-        "Input",
+        p_("shortcut window", "Input"),
         [
-          ["Open Number Pop-Up", "Return"],
+          [p_("shortcut window", "Open Number Pop-Up"), "Return"],
         ],
       ],
       [
-        "General",
+        p_("shortcut window", "General"),
         [
-          ["Show Shortcuts", "<Primary>question"],
-          ["Back to Main Menu", "<Primary>M"],
-          ["How to Play", "F1"],
-          ["Quit", "<Primary>Q <Primary>W"],
+          [p_("shortcut window", "Show Shortcuts"), "<Primary>question"],
+          [p_("shortcut window", "Back to Main Menu"), "<Primary>M"],
+          [p_("shortcut window", "How to Play"), "F1"],
+          [p_("shortcut window", "Quit"), "<Primary>Q <Primary>W"],
         ],
       ],
     ].freeze

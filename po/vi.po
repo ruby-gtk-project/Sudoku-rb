@@ -1,0 +1,524 @@
+# Vietnamese translation by Vietnam Linux L10n <https://github.com/linux-l10n-vi>
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the sudokugame package.
+msgid ""
+msgstr ""
+"Project-Id-Version: sudokugame\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 00:04+0000\n"
+"PO-Revision-Date: 2025-12-25 00:25+0700\n"
+"Last-Translator: Loc Huynh <https://github.com/hthienloc>\n"
+"Language-Team: \n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.8\n"
+
+#: lib/sudoku/finished_page.rb:19
+msgid "Puzzle Complete!"
+msgstr ""
+
+#: lib/sudoku/game_over_page.rb:18
+msgid "Game Over!"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:22
+msgid "Classic Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:23
+msgid "Diagonal Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:27 lib/sudoku/window.rb:28
+msgid "Easy"
+msgstr "Dễ"
+
+#: lib/sudoku/game_setup_dialog.rb:28 lib/sudoku/window.rb:29
+msgid "Medium"
+msgstr "Trung bình"
+
+#: lib/sudoku/game_setup_dialog.rb:29 lib/sudoku/window.rb:30
+msgid "Hard"
+msgstr "Khó"
+
+#: lib/sudoku/game_setup_dialog.rb:30 lib/sudoku/window.rb:31
+msgid "Extreme"
+msgstr "Cực khó"
+
+#: lib/sudoku/game_setup_dialog.rb:45 lib/sudoku/window.rb:303
+msgid "New Game"
+msgstr "Trò chơi mới"
+
+#: lib/sudoku/game_setup_dialog.rb:100
+msgid "Start Game"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:21
+msgid "The Basics"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:22
+msgid ""
+"The board is a 9×9 grid, divided into nine 3×3 blocks. Fill every cell with "
+"numbers from 1 to 9."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:27
+msgid "Rows & Columns"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:28
+msgid "Each row and column must contain unique numbers without duplicates."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:32
+msgid "Blocks Matter"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:33
+msgid ""
+"Each 3×3 block must also contain the numbers 1 through 9, without repeats."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:37
+msgid "Casual Mode"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:38
+msgid ""
+"Turn on Casual Mode in Preferences to check your entries against the "
+"solution. When off, only rule violations are flagged, not incorrect numbers."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:43
+msgid "Mistakes Happen"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:44
+msgid "Mistakes are highlighted in red so you can spot them easily."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:48
+msgid "Make Notes"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:49
+msgid "Use pencil mode to note possible numbers for a cell."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:132
+msgid "Previous"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:145
+msgid "Next"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:278
+msgid "Clear"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:281
+msgid "Clear Cell (Del/Backspace)"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:287
+msgid "Done"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:290
+msgid "Finish Editing Cell"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:24
+msgctxt "shortcut window"
+msgid "Game"
+msgstr "Trò chơi"
+
+#: lib/sudoku/shortcuts_dialog.rb:26
+msgctxt "shortcut window"
+msgid "Move Between Cells"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:27
+msgctxt "shortcut window"
+msgid "Jump Between Blocks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:31
+msgctxt "shortcut window"
+msgid "Pencil"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:33
+msgctxt "shortcut window"
+msgid "Pencil Mode"
+msgstr "Chế độ bút chì"
+
+#: lib/sudoku/shortcuts_dialog.rb:34
+msgctxt "shortcut window"
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:35
+msgctxt "shortcut window"
+msgid "Place Pencil Mark"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:39
+msgctxt "shortcut window"
+msgid "Input"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:41
+msgctxt "shortcut window"
+msgid "Open Number Pop-Up"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:45
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Chung"
+
+#: lib/sudoku/shortcuts_dialog.rb:47
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "Hiển thị phím tắt"
+
+#: lib/sudoku/shortcuts_dialog.rb:48
+msgctxt "shortcut window"
+msgid "Back to Main Menu"
+msgstr "Quay lại menu chính"
+
+#: lib/sudoku/shortcuts_dialog.rb:49
+msgctxt "shortcut window"
+msgid "How to Play"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:50
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Thoát"
+
+#: lib/sudoku/window.rb:68 lib/sudoku/window.rb:234
+msgid "Sudoku"
+msgstr "Sudoku"
+
+#: lib/sudoku/window.rb:239
+msgid "Back to Main Menu"
+msgstr "Quay lại menu chính"
+
+#: lib/sudoku/window.rb:247
+msgid "Menu"
+msgstr "Menu"
+
+#: lib/sudoku/window.rb:254
+msgid "Toggle Pencil Mode"
+msgstr "Chuyển đổi chế độ bút chì"
+
+#: lib/sudoku/window.rb:296
+msgid "Continue Game"
+msgstr "Tiếp tục trò chơi"
+
+#: lib/sudoku/window.rb:372
+msgid "Continue Saved Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:377
+msgid "Start a New Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:458
+msgid "Pencil Mode • Note possible numbers"
+msgstr ""
+
+#: lib/sudoku/window.rb:468
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: lib/sudoku/window.rb:470
+msgid "Preferences"
+msgstr ""
+
+#: lib/sudoku/window.rb:471
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/window.rb:473
+msgid "How To Play"
+msgstr ""
+
+#: lib/sudoku/window.rb:474
+msgid "About Sudoku"
+msgstr ""
+
+#~ msgid "Solve Sudoku puzzles"
+#~ msgstr "Giải câu đố Sudoku"
+
+#~ msgid "Solve puzzles in style"
+#~ msgstr "Giải câu đố theo phong cách"
+
+#~ msgid ""
+#~ "Sudoku is a puzzle app that lets you solve classic number-placement "
+#~ "challenges. It features a clean, distraction-free design with a simple "
+#~ "interface to keep you focused and engaged."
+#~ msgstr ""
+#~ "Sudoku là một ứng dụng giải đố cho phép bạn giải các thử thách xếp số cổ "
+#~ "điển. Nó có thiết kế gọn gàng, không gây xao lãng với giao diện đơn giản "
+#~ "giúp bạn tập trung và tương tác."
+
+#~ msgid "Features:"
+#~ msgstr "Tính năng:"
+
+#~ msgid "Modern GTK4 and libadwaita interface"
+#~ msgstr "Giao diện GTK4 và libadwaita hiện đại"
+
+#~ msgid "Keyboard shortcuts for quick access to all functions"
+#~ msgstr "Phím tắt để truy cập nhanh vào tất cả các chức năng"
+
+#~ msgid "Save and load games seamlessly to continue your progress anytime"
+#~ msgstr ""
+#~ "Lưu và tải trò chơi một cách liền mạch để tiếp tục tiến trình của bạn "
+#~ "bất cứ lúc nào"
+
+#~ msgid "Highlight active row and cell to improve focus and ease of play"
+#~ msgstr ""
+#~ "Làm nổi bật hàng và ô đang hoạt động để cải thiện sự tập trung và dễ chơi"
+
+#~ msgid ""
+#~ "Conflict highlighting to help identify mistakes, ideal for beginners"
+#~ msgstr ""
+#~ "Làm nổi bật xung đột để giúp xác định lỗi, lý tưởng cho người mới bắt đầu"
+
+#~ msgid "Suitable for all skill levels, from beginners to experts"
+#~ msgstr ""
+#~ "Thích hợp cho mọi cấp độ kỹ năng, từ người mới bắt đầu đến chuyên gia"
+
+#~ msgid "Sudoku in light mode"
+#~ msgstr "Sudoku ở chế độ sáng"
+
+#~ msgid "Sudoku in dark mode"
+#~ msgstr "Sudoku ở chế độ tối"
+
+#~ msgid "Sudoku landing page in dark mode"
+#~ msgstr "Trang đích Sudoku ở chế độ tối"
+
+#~ msgid "Sudoku landing page in light mode"
+#~ msgstr "Trang đích Sudoku ở chế độ sáng"
+
+#~ msgid "sudoku"
+#~ msgstr "sudoku"
+
+#~ msgid "puzzle"
+#~ msgstr "câu đố"
+
+#~ msgid "game"
+#~ msgstr "trò chơi"
+
+#~ msgid "logic"
+#~ msgstr "logic"
+
+#~ msgid "numbers"
+#~ msgstr "con số"
+
+#~ msgid "SepehrRS"
+#~ msgstr "SepehrRS"
+
+#~ msgid "Fixed game not being remembered after re-opening Sudoku"
+#~ msgstr "Đã sửa lỗi trò chơi không được ghi nhớ sau khi mở lại Sudoku"
+
+#~ msgid ""
+#~ "Also moved the Back to main menu button from the primary menu to the "
+#~ "headerbar"
+#~ msgstr ""
+#~ "Đồng thời di chuyển nút Quay lại menu chính từ menu chính sang thanh "
+#~ "tiêu đề"
+
+#~ msgid "Updated completion screen and added a difficulty subtitle:"
+#~ msgstr "Cập nhật màn hình hoàn thành và thêm phụ đề độ khó:"
+
+#~ msgid ""
+#~ "Completion screen now shows randomized messages with improved imagery"
+#~ msgstr ""
+#~ "Màn hình hoàn thành hiện hiển thị các thông báo ngẫu nhiên với hình ảnh "
+#~ "được cải thiện"
+
+#~ msgid "Added difficulty level as a subtitle in the header bar"
+#~ msgstr "Đã thêm mức độ khó làm phụ đề trong thanh tiêu đề"
+
+#~ msgid "Updated shortcuts:"
+#~ msgstr "Cập nhật phím tắt:"
+
+#~ msgid "Added F10 as primary menu's shortcut"
+#~ msgstr "Đã thêm F10 làm phím tắt của menu chính"
+
+#~ msgid "Added Ctrl + w to close Sudoku"
+#~ msgstr "Đã thêm Ctrl + W để đóng Sudoku"
+
+#~ msgid ""
+#~ "Additionally, a logging issue when pencil mode was turned on/off is now "
+#~ "fixed."
+#~ msgstr ""
+#~ "Ngoài ra, sự cố ghi nhật ký khi bật/tắt chế độ bút chì hiện đã được khắc "
+#~ "phục."
+
+#~ msgid ""
+#~ "Enhanced screen reader support for Sudoku, making the game more "
+#~ "accessible and intuitive for players who rely on assistive technologies. "
+#~ "With these improvements, users can now:"
+#~ msgstr ""
+#~ "Hỗ trợ trình đọc màn hình nâng cao cho Sudoku, giúp trò chơi dễ tiếp cận "
+#~ "và trực quan hơn đối với những người chơi dựa vào công nghệ hỗ trợ. Với "
+#~ "những cải tiến này, giờ đây người dùng có thể:"
+
+#~ msgid ""
+#~ "Receive clear feedback on whether the number they entered is correct or "
+#~ "incorrect"
+#~ msgstr ""
+#~ "Nhận được phản hồi rõ ràng về việc con số họ nhập vào là đúng hay sai"
+
+#~ msgid "Navigate the Sudoku interface more easily and efficiently"
+#~ msgstr "Điều hướng giao diện Sudoku dễ dàng và hiệu quả hơn"
+
+#~ msgid ""
+#~ "Additionally, a visual bug affecting the pencil icon has been fixed."
+#~ msgstr "Ngoài ra, lỗi hình ảnh hưởng đến biểu tượng bút chì đã được sửa."
+
+#~ msgid ""
+#~ "First stable release of Sudoku! A modern GTK4/libadwaita application for "
+#~ "playing Sudoku puzzles."
+#~ msgstr ""
+#~ "Bản phát hành ổn định đầu tiên của Sudoku! Một ứng dụng GTK4/libadwaita "
+#~ "hiện đại để chơi các câu đố Sudoku."
+
+#~ msgid "Back to main menu"
+#~ msgstr "Quay lại menu chính"
+
+#~ msgid "Sudoku Game Icon"
+#~ msgstr "Biểu tượng trò chơi Sudoku"
+
+#~ msgid "Play Sudoku"
+#~ msgstr "Chơi Sudoku"
+
+#~ msgid "_Continue Game"
+#~ msgstr "Tiếp tục trò _chơi"
+
+#~ msgid "_New Game"
+#~ msgstr "Trò chơi _mới"
+
+#~ msgid "_Keyboard Shortcuts"
+#~ msgstr "_Phím tắt"
+
+#~ msgid "Keyboard shortcuts"
+#~ msgstr "Phím tắt"
+
+#~ msgid "How to play"
+#~ msgstr "Cách chơi"
+
+#~ msgid "_About"
+#~ msgstr "_Giới thiệu"
+
+#~ msgid "About"
+#~ msgstr "Giới thiệu"
+
+#~ msgid "_Quit"
+#~ msgstr "_Thoát"
+
+#~ msgid "Quit"
+#~ msgstr "Thoát"
+
+#~ msgid "Sudoku Master! You've solved the puzzle with perfect logic!"
+#~ msgstr "Bậc thầy Sudoku! Bạn đã giải được câu đố một cách logic hoàn hảo!"
+
+#~ msgid "Incredible! Every number found its perfect place!"
+#~ msgstr "Đáng kinh ngạc! Mọi con số đều tìm thấy vị trí hoàn hảo của nó!"
+
+#~ msgid "Brilliant deduction! You've conquered this Sudoku challenge!"
+#~ msgstr "Suy luận tuyệt vời! Bạn đã chinh phục được thử thách Sudoku này!"
+
+#~ msgid "Perfect solution! Your logical thinking is outstanding!"
+#~ msgstr "Giải pháp hoàn hảo! Tư duy logic của bạn thật xuất sắc!"
+
+#~ msgid "Amazing work! You've mastered the art of Sudoku!"
+#~ msgstr "Công việc tuyệt vời! Bạn đã thành thạo nghệ thuật Sudoku!"
+
+#~ msgid "Fantastic! Every row, column, and box is perfectly filled!"
+#~ msgstr "Tuyệt vời! Mỗi hàng, cột và hộp đều được lấp đầy hoàn hảo!"
+
+#~ msgid "Outstanding! Your puzzle-solving skills are remarkable!"
+#~ msgstr "Nổi bật! Kỹ năng giải câu đố của bạn thật đáng chú ý!"
+
+#~ msgid "Excellent! You've completed the Sudoku with flying colors!"
+#~ msgstr "Xuất sắc! Bạn đã hoàn thành Sudoku một cách xuất sắc!"
+
+#~ msgid "Spectacular! Your mathematical reasoning is top-notch!"
+#~ msgstr "Ngoạn mục! Lý luận toán học của bạn là đỉnh cao!"
+
+#~ msgid "Well done! You've proven yourself a Sudoku champion!"
+#~ msgstr "Làm tốt! Bạn đã chứng tỏ mình là nhà vô địch Sudoku!"
+
+#~ msgid "Congratulations! You've solved the puzzle flawlessly!"
+#~ msgstr "Chúc mừng! Bạn đã giải được câu đố một cách hoàn hảo!"
+
+#~ msgid "Victory! Your strategic thinking led to perfect completion!"
+#~ msgstr ""
+#~ "Chiến thắng! Tư duy chiến lược của bạn đã dẫn đến sự hoàn thành hoàn hảo!"
+
+#~ msgid "Genius! You've mastered the Sudoku grid with precision!"
+#~ msgstr "Thiên tài! Bạn đã thành thạo lưới Sudoku một cách chính xác!"
+
+#~ msgid "Masterpiece! Every number placement was calculated perfectly!"
+#~ msgstr "Kiệt tác! Mọi vị trí số đều được tính toán hoàn hảo!"
+
+#~ msgid "Phenomenal! You've conquered this Sudoku with style!"
+#~ msgstr ""
+#~ "Phi thường! Bạn đã chinh phục được trò chơi Sudoku này một cách đầy "
+#~ "phong cách!"
+
+#~ msgid "Wrong"
+#~ msgstr "Sai"
+
+#~ msgid "Clear Cell"
+#~ msgstr "Xóa ô"
+
+#~ msgid "How to Play Sudoku"
+#~ msgstr "Cách chơi Sudoku"
+
+#~ msgid "Welcome to Sudoku!"
+#~ msgstr "Chào mừng đến với Sudoku!"
+
+#~ msgid ""
+#~ "The goal is to fill the grid so that every row, column, and 3x3 box "
+#~ "contains the numbers 1 through 9 without repeats."
+#~ msgstr ""
+#~ "Mục tiêu là lấp đầy lưới sao cho mỗi hàng, cột và ô 3x3 đều chứa các số "
+#~ "từ 1 đến 9 mà không lặp lại."
+
+#~ msgid "How to play:"
+#~ msgstr "Cách chơi:"
+
+#~ msgid "– Click on an empty cell to select it."
+#~ msgstr "– Bấm vào ô trống để chọn ô đó."
+
+#~ msgid "– Use your keyboard or pencil tool to input a number."
+#~ msgstr "– Sử dụng bàn phím hoặc công cụ bút chì để nhập số."
+
+#~ msgid "– Use the pencil tool to make notes."
+#~ msgstr "– Dùng công cụ bút chì để ghi chú."
+
+#~ msgid "– Use the backspace key to clear a cell."
+#~ msgstr "– Dùng phím Backspace để xóa một ô."
+
+#~ msgid "– Try to solve the puzzle logically."
+#~ msgstr "– Cố gắng giải câu đố một cách logic."
+
+#~ msgid "Good luck and have fun!"
+#~ msgstr "Chúc may mắn và vui vẻ!"
+
+#~ msgid "Select Difficulty"
+#~ msgstr "Chọn độ khó"
+
+#~ msgid "Start new game with {} difficulty"
+#~ msgstr "Bắt đầu trò chơi mới với độ khó {}"

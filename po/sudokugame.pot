@@ -1,0 +1,257 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2025 sepehr-rs
+# This file is distributed under the same license as the sudokugame package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: sudokugame 0.1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 00:04+0000\n"
+"PO-Revision-Date: 2026-11-03 00:04+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: lib/sudoku/finished_page.rb:19
+msgid "Puzzle Complete!"
+msgstr ""
+
+#: lib/sudoku/game_over_page.rb:18
+msgid "Game Over!"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:22
+msgid "Classic Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:23
+msgid "Diagonal Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:27 lib/sudoku/window.rb:28
+msgid "Easy"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:28 lib/sudoku/window.rb:29
+msgid "Medium"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:29 lib/sudoku/window.rb:30
+msgid "Hard"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:30 lib/sudoku/window.rb:31
+msgid "Extreme"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:45 lib/sudoku/window.rb:303
+msgid "New Game"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:100
+msgid "Start Game"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:21
+msgid "The Basics"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:22
+msgid ""
+"The board is a 9×9 grid, divided into nine 3×3 blocks. Fill every cell with "
+"numbers from 1 to 9."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:27
+msgid "Rows & Columns"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:28
+msgid "Each row and column must contain unique numbers without duplicates."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:32
+msgid "Blocks Matter"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:33
+msgid ""
+"Each 3×3 block must also contain the numbers 1 through 9, without repeats."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:37
+msgid "Casual Mode"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:38
+msgid ""
+"Turn on Casual Mode in Preferences to check your entries against the "
+"solution. When off, only rule violations are flagged, not incorrect numbers."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:43
+msgid "Mistakes Happen"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:44
+msgid "Mistakes are highlighted in red so you can spot them easily."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:48
+msgid "Make Notes"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:49
+msgid "Use pencil mode to note possible numbers for a cell."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:132
+msgid "Previous"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:145
+msgid "Next"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:278
+msgid "Clear"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:281
+msgid "Clear Cell (Del/Backspace)"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:287
+msgid "Done"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:290
+msgid "Finish Editing Cell"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:24
+msgctxt "shortcut window"
+msgid "Game"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:26
+msgctxt "shortcut window"
+msgid "Move Between Cells"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:27
+msgctxt "shortcut window"
+msgid "Jump Between Blocks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:31
+msgctxt "shortcut window"
+msgid "Pencil"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:33
+msgctxt "shortcut window"
+msgid "Pencil Mode"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:34
+msgctxt "shortcut window"
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:35
+msgctxt "shortcut window"
+msgid "Place Pencil Mark"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:39
+msgctxt "shortcut window"
+msgid "Input"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:41
+msgctxt "shortcut window"
+msgid "Open Number Pop-Up"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:45
+msgctxt "shortcut window"
+msgid "General"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:47
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:48
+msgctxt "shortcut window"
+msgid "Back to Main Menu"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:49
+msgctxt "shortcut window"
+msgid "How to Play"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:50
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr ""
+
+#: lib/sudoku/window.rb:68 lib/sudoku/window.rb:234
+msgid "Sudoku"
+msgstr ""
+
+#: lib/sudoku/window.rb:239
+msgid "Back to Main Menu"
+msgstr ""
+
+#: lib/sudoku/window.rb:247
+msgid "Menu"
+msgstr ""
+
+#: lib/sudoku/window.rb:254
+msgid "Toggle Pencil Mode"
+msgstr ""
+
+#: lib/sudoku/window.rb:296
+msgid "Continue Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:372
+msgid "Continue Saved Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:377
+msgid "Start a New Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:458
+msgid "Pencil Mode • Note possible numbers"
+msgstr ""
+
+#: lib/sudoku/window.rb:468
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: lib/sudoku/window.rb:470
+msgid "Preferences"
+msgstr ""
+
+#: lib/sudoku/window.rb:471
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/window.rb:473
+msgid "How To Play"
+msgstr ""
+
+#: lib/sudoku/window.rb:474
+msgid "About Sudoku"
+msgstr ""

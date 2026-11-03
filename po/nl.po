@@ -1,0 +1,532 @@
+# Dutch translations for Sudoku package.
+# Copyright (C) 2025 the Sudoku COPYRIGHT HOLDER
+# This file is distributed under the same license as the Sudoku package.
+# Automatically generated, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: sudokugame\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-11-03 00:04+0000\n"
+"PO-Revision-Date: 2025-08-18 18:02+0200\n"
+"Last-Translator: Alexander Vanhee\n"
+"Language-Team: none\n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: lib/sudoku/finished_page.rb:19
+msgid "Puzzle Complete!"
+msgstr ""
+
+#: lib/sudoku/game_over_page.rb:18
+msgid "Game Over!"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:22
+msgid "Classic Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:23
+msgid "Diagonal Sudoku"
+msgstr ""
+
+#: lib/sudoku/game_setup_dialog.rb:27 lib/sudoku/window.rb:28
+msgid "Easy"
+msgstr "Makkelijk"
+
+#: lib/sudoku/game_setup_dialog.rb:28 lib/sudoku/window.rb:29
+msgid "Medium"
+msgstr "Gemiddeld"
+
+#: lib/sudoku/game_setup_dialog.rb:29 lib/sudoku/window.rb:30
+msgid "Hard"
+msgstr "Moeilijk"
+
+#: lib/sudoku/game_setup_dialog.rb:30 lib/sudoku/window.rb:31
+msgid "Extreme"
+msgstr "Extreem"
+
+#: lib/sudoku/game_setup_dialog.rb:45 lib/sudoku/window.rb:303
+msgid "New Game"
+msgstr "Nieuw spel"
+
+#: lib/sudoku/game_setup_dialog.rb:100
+msgid "Start Game"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:21
+msgid "The Basics"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:22
+msgid ""
+"The board is a 9×9 grid, divided into nine 3×3 blocks. Fill every cell with "
+"numbers from 1 to 9."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:27
+msgid "Rows & Columns"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:28
+msgid "Each row and column must contain unique numbers without duplicates."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:32
+msgid "Blocks Matter"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:33
+msgid ""
+"Each 3×3 block must also contain the numbers 1 through 9, without repeats."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:37
+msgid "Casual Mode"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:38
+msgid ""
+"Turn on Casual Mode in Preferences to check your entries against the "
+"solution. When off, only rule violations are flagged, not incorrect numbers."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:43
+msgid "Mistakes Happen"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:44
+msgid "Mistakes are highlighted in red so you can spot them easily."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:48
+msgid "Make Notes"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:49
+msgid "Use pencil mode to note possible numbers for a cell."
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:132
+msgid "Previous"
+msgstr ""
+
+#: lib/sudoku/help_dialog.rb:145
+msgid "Next"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:278
+msgid "Clear"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:281
+msgid "Clear Cell (Del/Backspace)"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:287
+msgid "Done"
+msgstr ""
+
+#: lib/sudoku/popover_manager.rb:290
+msgid "Finish Editing Cell"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:24
+msgctxt "shortcut window"
+msgid "Game"
+msgstr "Spel"
+
+#: lib/sudoku/shortcuts_dialog.rb:26
+msgctxt "shortcut window"
+msgid "Move Between Cells"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:27
+msgctxt "shortcut window"
+msgid "Jump Between Blocks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:31
+msgctxt "shortcut window"
+msgid "Pencil"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:33
+msgctxt "shortcut window"
+msgid "Pencil Mode"
+msgstr "Potloodmodus"
+
+#: lib/sudoku/shortcuts_dialog.rb:34
+msgctxt "shortcut window"
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:35
+msgctxt "shortcut window"
+msgid "Place Pencil Mark"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:39
+msgctxt "shortcut window"
+msgid "Input"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:41
+msgctxt "shortcut window"
+msgid "Open Number Pop-Up"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:45
+msgctxt "shortcut window"
+msgid "General"
+msgstr "Algemeen"
+
+#: lib/sudoku/shortcuts_dialog.rb:47
+msgctxt "shortcut window"
+msgid "Show Shortcuts"
+msgstr "Snelkoppelingen tonen"
+
+#: lib/sudoku/shortcuts_dialog.rb:48
+msgctxt "shortcut window"
+msgid "Back to Main Menu"
+msgstr "Terug naar hoofdmenu"
+
+#: lib/sudoku/shortcuts_dialog.rb:49
+msgctxt "shortcut window"
+msgid "How to Play"
+msgstr ""
+
+#: lib/sudoku/shortcuts_dialog.rb:50
+msgctxt "shortcut window"
+msgid "Quit"
+msgstr "Afsluiten"
+
+#: lib/sudoku/window.rb:68 lib/sudoku/window.rb:234
+msgid "Sudoku"
+msgstr "Sudoku"
+
+#: lib/sudoku/window.rb:239
+msgid "Back to Main Menu"
+msgstr "Terug naar hoofdmenu"
+
+#: lib/sudoku/window.rb:247
+msgid "Menu"
+msgstr "Menu"
+
+#: lib/sudoku/window.rb:254
+msgid "Toggle Pencil Mode"
+msgstr "Potloodmodus in-/uitschakelen"
+
+#: lib/sudoku/window.rb:296
+msgid "Continue Game"
+msgstr "Spel voortzetten"
+
+#: lib/sudoku/window.rb:372
+msgid "Continue Saved Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:377
+msgid "Start a New Game"
+msgstr ""
+
+#: lib/sudoku/window.rb:458
+msgid "Pencil Mode • Note possible numbers"
+msgstr ""
+
+#: lib/sudoku/window.rb:468
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: lib/sudoku/window.rb:470
+msgid "Preferences"
+msgstr ""
+
+#: lib/sudoku/window.rb:471
+msgid "Auto Pencil Marks"
+msgstr ""
+
+#: lib/sudoku/window.rb:473
+msgid "How To Play"
+msgstr ""
+
+#: lib/sudoku/window.rb:474
+msgid "About Sudoku"
+msgstr ""
+
+#~ msgid "Solve Sudoku puzzles"
+#~ msgstr "Los Sudoku-puzzels op"
+
+#~ msgid "Solve puzzles in style"
+#~ msgstr "Los puzzels op in stijl"
+
+#~ msgid ""
+#~ "Sudoku is a puzzle app that lets you solve classic number-placement "
+#~ "challenges. It features a clean, distraction-free design with a simple "
+#~ "interface to keep you focused and engaged."
+#~ msgstr ""
+#~ "Sudoku is een puzzelapp waarmee je klassieke uitdagingen voor het "
+#~ "plaatsen van nummers kunt oplossen. De app heeft een strakke, "
+#~ "afleidingsvrije lay-out met een eenvoudige interface om je gefocust en "
+#~ "betrokken te houden."
+
+#~ msgid "Features:"
+#~ msgstr "Functies:"
+
+#~ msgid "Modern GTK4 and libadwaita interface"
+#~ msgstr "Moderne GTK4- en libadwaita-interface"
+
+#~ msgid "Keyboard shortcuts for quick access to all functions"
+#~ msgstr "Toetsenbord snelkoppelingen voor snelle toegang tot alle functies"
+
+#~ msgid "Save and load games seamlessly to continue your progress anytime"
+#~ msgstr ""
+#~ "Sla spellen naadloos op en laad ze om je voortgang op elk moment voort "
+#~ "te zetten"
+
+#~ msgid "Highlight active row and cell to improve focus and ease of play"
+#~ msgstr ""
+#~ "Markeer actieve rij en cel om de focus en het speelgemak te verbeteren"
+
+#~ msgid ""
+#~ "Conflict highlighting to help identify mistakes, ideal for beginners"
+#~ msgstr ""
+#~ "Markering van conflicten om fouten te helpen identificeren, ideaal voor "
+#~ "beginners"
+
+#~ msgid "Suitable for all skill levels, from beginners to experts"
+#~ msgstr "Geschikt voor alle vaardigheidsniveaus, van beginners tot experts"
+
+#~ msgid "Sudoku in light mode"
+#~ msgstr "Sudoku in lichte modus"
+
+#~ msgid "Sudoku in dark mode"
+#~ msgstr "Sudoku in donkere modus"
+
+#~ msgid "Sudoku landing page in dark mode"
+#~ msgstr "Sudoku landingspagina in donkere modus"
+
+#~ msgid "Sudoku landing page in light mode"
+#~ msgstr "Sudoku landingspagina in lichte modus"
+
+#~ msgid "sudoku"
+#~ msgstr "sudoku"
+
+#~ msgid "puzzle"
+#~ msgstr "puzzel"
+
+#~ msgid "game"
+#~ msgstr "spel"
+
+#~ msgid "logic"
+#~ msgstr "logica"
+
+#~ msgid "numbers"
+#~ msgstr "nummers"
+
+#~ msgid "SepehrRS"
+#~ msgstr "SepehrRS"
+
+#~ msgid "Fixed game not being remembered after re-opening Sudoku"
+#~ msgstr "Het spel wordt nu onthouden na het heropenen van Sudoku"
+
+#~ msgid ""
+#~ "Also moved the Back to main menu button from the primary menu to the "
+#~ "headerbar"
+#~ msgstr ""
+#~ "Ook de knop 'Terug naar hoofdmenu' verplaatst van het primaire menu naar "
+#~ "de headerbalk"
+
+#~ msgid "Updated completion screen and added a difficulty subtitle:"
+#~ msgstr ""
+#~ "Scherm bij voltooiing bijgewerkt en een moeilijkheidsgraad ondertitel "
+#~ "toegevoegd:"
+
+#~ msgid ""
+#~ "Completion screen now shows randomized messages with improved imagery"
+#~ msgstr ""
+#~ "Het voltooiingsscherm toont nu gerandomiseerde berichten met verbeterde "
+#~ "beelden"
+
+#~ msgid "Added difficulty level as a subtitle in the header bar"
+#~ msgstr "Moeilijkheidsgraad toegevoegd als ondertitel in de headerbalk"
+
+#~ msgid "Updated shortcuts:"
+#~ msgstr "Snelkoppelingen bijgewerkt:"
+
+#~ msgid "Added F10 as primary menu's shortcut"
+#~ msgstr "F10 toegevoegd als snelkoppeling voor het hoofdmenu"
+
+#~ msgid "Added Ctrl + w to close Sudoku"
+#~ msgstr "Ctrl + W toegevoegd om Sudoku te sluiten"
+
+#~ msgid ""
+#~ "Additionally, a logging issue when pencil mode was turned on/off is now "
+#~ "fixed."
+#~ msgstr ""
+#~ "Daarnaast is een logboekprobleem opgelost dat optrad wanneer de "
+#~ "potloodmodus werd in- of uitgeschakeld."
+
+#~ msgid ""
+#~ "Enhanced screen reader support for Sudoku, making the game more "
+#~ "accessible and intuitive for players who rely on assistive technologies. "
+#~ "With these improvements, users can now:"
+#~ msgstr ""
+#~ "Verbeterde ondersteuning voor schermlezers voor Sudoku, waardoor het "
+#~ "spel toegankelijker en intuïtiever wordt voor spelers die afhankelijk "
+#~ "zijn van hulptechnologieën. Met deze verbeteringen kunnen gebruikers nu:"
+
+#~ msgid ""
+#~ "Receive clear feedback on whether the number they entered is correct or "
+#~ "incorrect"
+#~ msgstr ""
+#~ "Duidelijke feedback krijgen over of het ingevoerde nummer correct of "
+#~ "onjuist is"
+
+#~ msgid "Navigate the Sudoku interface more easily and efficiently"
+#~ msgstr "Gemakkelijker en efficiënter door de Sudoku-interface navigeren"
+
+#~ msgid ""
+#~ "Additionally, a visual bug affecting the pencil icon has been fixed."
+#~ msgstr ""
+#~ "Daarnaast is een visuele bug die het potloodpictogram beïnvloedde "
+#~ "opgelost."
+
+#~ msgid ""
+#~ "First stable release of Sudoku! A modern GTK4/libadwaita application for "
+#~ "playing Sudoku puzzles."
+#~ msgstr ""
+#~ "Eerste stabiele uitgave van Sudoku! Een moderne GTK4/libadwaita "
+#~ "applicatie voor het spelen van Sudoku-puzzels."
+
+#~ msgid "Back to main menu"
+#~ msgstr "Terug naar hoofdmenu"
+
+#~ msgid "Sudoku Game Icon"
+#~ msgstr "Sudoku-spel icoon"
+
+#~ msgid "Sudoku Game"
+#~ msgstr "Sudoku-spel"
+
+#~ msgid "_Continue Game"
+#~ msgstr "_Spel voortzetten"
+
+#~ msgid "_New Game"
+#~ msgstr "_Nieuw spel"
+
+#~ msgid "_Keyboard Shortcuts"
+#~ msgstr "_Toetsenbord snelkoppelingen"
+
+#~ msgid "Keyboard shortcuts"
+#~ msgstr "Toetsenbord snelkoppelingen"
+
+#~ msgid "How to play"
+#~ msgstr "Hoe te spelen"
+
+#~ msgid "_About"
+#~ msgstr "_Over"
+
+#~ msgid "About"
+#~ msgstr "Over"
+
+#~ msgid "_Quit"
+#~ msgstr "_Sluiten"
+
+#~ msgid "Quit"
+#~ msgstr "Sluiten"
+
+#~ msgid "Sudoku Master! You've solved the puzzle with perfect logic!"
+#~ msgstr "Sudoku-meester! Je hebt de puzzel met perfecte logica opgelost!"
+
+#~ msgid "Incredible! Every number found its perfect place!"
+#~ msgstr "Ongelooflijk! Elk nummer heeft zijn perfecte plaats gevonden!"
+
+#~ msgid "Brilliant deduction! You've conquered this Sudoku challenge!"
+#~ msgstr "Briljante conclusie! Je hebt deze Sudoku-uitdaging overwonnen!"
+
+#~ msgid "Perfect solution! Your logical thinking is outstanding!"
+#~ msgstr "Perfecte oplossing! Je logische denken is uitstekend!"
+
+#~ msgid "Amazing work! You've mastered the art of Sudoku!"
+#~ msgstr "Geweldig werk! Je hebt de kunst van Sudoku onder de knie!"
+
+#~ msgid "Fantastic! Every row, column, and box is perfectly filled!"
+#~ msgstr "Fantastisch! Elke rij, kolom en box is perfect gevuld!"
+
+#~ msgid "Outstanding! Your puzzle-solving skills are remarkable!"
+#~ msgstr "Uitstekend! Je puzzeloplossende vaardigheden zijn opmerkelijk!"
+
+#~ msgid "Excellent! You've completed the Sudoku with flying colors!"
+#~ msgstr "Uitstekend! Je hebt de Sudoku met vlag en wimpel voltooid!"
+
+#~ msgid "Spectacular! Your mathematical reasoning is top-notch!"
+#~ msgstr "Spectaculair! Je wiskundige redenering is van topklasse!"
+
+#~ msgid "Well done! You've proven yourself a Sudoku champion!"
+#~ msgstr "Goed gedaan! Je hebt jezelf bewezen als een Sudoku-kampioen!"
+
+#~ msgid "Congratulations! You've solved the puzzle flawlessly!"
+#~ msgstr "Gefeliciteerd! Je hebt de puzzel foutloos opgelost!"
+
+#~ msgid "Victory! Your strategic thinking led to perfect completion!"
+#~ msgstr "Overwinning! Je strategisch denken leidde tot perfecte voltooiing!"
+
+#~ msgid "Genius! You've mastered the Sudoku grid with precision!"
+#~ msgstr ""
+#~ "Geniaal! Je hebt het Sudoku-rooster met precisie onder de knie gekregen!"
+
+#~ msgid "Masterpiece! Every number placement was calculated perfectly!"
+#~ msgstr "Meesterwerk! Elke nummerplaatsing was perfect berekend!"
+
+#~ msgid "Phenomenal! You've conquered this Sudoku with style!"
+#~ msgstr "Fenomenaal! Je hebt deze Sudoku in stijl veroverd!"
+
+#~ msgid "Wrong"
+#~ msgstr "Fout"
+
+#~ msgid "Clear Cell"
+#~ msgstr "Cel leegmaken"
+
+#~ msgid "How to Play Sudoku"
+#~ msgstr "Hoe Sudoku te spelen"
+
+#~ msgid "Welcome to Sudoku!"
+#~ msgstr "Welkom bij Sudoku!"
+
+#~ msgid ""
+#~ "The goal is to fill the grid so that every row, column, and 3x3 box "
+#~ "contains the numbers 1 through 9 without repeats."
+#~ msgstr ""
+#~ "Het doel is om het rooster zo te vullen dat elke rij, kolom en 3x3 box "
+#~ "de nummers 1 tot en met 9 bevat zonder herhalingen."
+
+#~ msgid "How to play:"
+#~ msgstr "Hoe te spelen:"
+
+#~ msgid "– Click on an empty cell to select it."
+#~ msgstr "– Klik op een lege cel om deze te selecteren."
+
+#~ msgid "– Use your keyboard or pencil tool to input a number."
+#~ msgstr ""
+#~ "– Gebruik je toetsenbord of het potloodgereedschap om een nummer in te "
+#~ "voeren."
+
+#~ msgid "– Use the pencil tool to make notes."
+#~ msgstr "– Gebruik het potloodgereedschap om notities te maken."
+
+#~ msgid "– Use the backspace key to clear a cell."
+#~ msgstr "– Gebruik de backspace-toets om een cel leeg te maken."
+
+#~ msgid "– Try to solve the puzzle logically."
+#~ msgstr "– Probeer de puzzel logisch op te lossen."
+
+#~ msgid "Good luck and have fun!"
+#~ msgstr "Veel succes en plezier!"
+
+#~ msgid "Select Difficulty"
+#~ msgstr "Selecteer moeilijkheid"
+
+#~ msgid "Start new game with {} difficulty"
+#~ msgstr "Start nieuw spel met {} als moeilijkheidsgraad"

@@ -2,6 +2,7 @@
 
 require "gtk4"
 require "adwaita"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/screens/help_dialog.py and
@@ -12,39 +13,44 @@ module Sudoku
   # bound to the same moves (swapped in a right-to-left layout).
   class HowToPlayDialog < Adwaita::Dialog
     type_register
+    include Gettext
 
     PAGES = [
       [
         "basics.svg",
-        "The Basics",
-        "The board is a 9×9 grid, divided into nine 3×3 blocks. " \
-          "Fill every cell with numbers from 1 to 9.",
+        _("The Basics"),
+        _(
+          "The board is a 9×9 grid, divided into nine 3×3 blocks. " \
+            "Fill every cell with numbers from 1 to 9.",
+        ),
       ],
       [
         "rows-and-columns.svg",
-        "Rows & Columns",
-        "Each row and column must contain unique numbers without duplicates.",
+        _("Rows & Columns"),
+        _("Each row and column must contain unique numbers without duplicates."),
       ],
       [
         "blocks.svg",
-        "Blocks Matter",
-        "Each 3×3 block must also contain the numbers 1 through 9, without repeats.",
+        _("Blocks Matter"),
+        _("Each 3×3 block must also contain the numbers 1 through 9, without repeats."),
       ],
       [
         "casual.svg",
-        "Casual Mode",
-        "Turn on Casual Mode in Preferences to check your entries against the " \
-          "solution. When off, only rule violations are flagged, not incorrect numbers.",
+        _("Casual Mode"),
+        _(
+          "Turn on Casual Mode in Preferences to check your entries against the " \
+            "solution. When off, only rule violations are flagged, not incorrect numbers.",
+        ),
       ],
       [
         "mistake.svg",
-        "Mistakes Happen",
-        "Mistakes are highlighted in red so you can spot them easily.",
+        _("Mistakes Happen"),
+        _("Mistakes are highlighted in red so you can spot them easily."),
       ],
       [
         "pencil-mode.svg",
-        "Make Notes",
-        "Use pencil mode to note possible numbers for a cell.",
+        _("Make Notes"),
+        _("Use pencil mode to note possible numbers for a cell."),
       ],
     ].freeze
 
@@ -127,7 +133,7 @@ module Sudoku
         button.margin_start = 16
         button.can_focus = true
         button.icon_name = "go-previous-symbolic"
-        button.tooltip_text = "Previous"
+        button.tooltip_text = _("Previous")
         button.sensitive = false
         button.add_css_class("circular")
       end
@@ -140,7 +146,7 @@ module Sudoku
         button.margin_end = 16
         button.can_focus = true
         button.icon_name = "go-next-symbolic"
-        button.tooltip_text = "Next"
+        button.tooltip_text = _("Next")
         button.add_css_class("circular")
       end
     end

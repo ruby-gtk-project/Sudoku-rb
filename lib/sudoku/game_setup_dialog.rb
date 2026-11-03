@@ -2,6 +2,7 @@
 
 require "gtk4"
 require "adwaita"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/screens/game_setup_dialog.py.
@@ -10,6 +11,7 @@ module Sudoku
   # a Start Game button that hands the pair to the window.
   class GameSetupDialog < Adwaita::Dialog
     type_register
+    include Gettext
 
     EASY_DIFFICULTY = 0.2
     MEDIUM_DIFFICULTY = 0.5
@@ -17,15 +19,15 @@ module Sudoku
     EXTREME_DIFFICULTY = 0.9
 
     VARIANTS = [
-      ["Classic Sudoku", "classic"],
-      ["Diagonal Sudoku", "diagonal"],
+      [_("Classic Sudoku"), "classic"],
+      [_("Diagonal Sudoku"), "diagonal"],
     ].freeze
 
     DIFFICULTIES = [
-      ["Easy", EASY_DIFFICULTY],
-      ["Medium", MEDIUM_DIFFICULTY],
-      ["Hard", HARD_DIFFICULTY],
-      ["Extreme", EXTREME_DIFFICULTY],
+      [_("Easy"), EASY_DIFFICULTY],
+      [_("Medium"), MEDIUM_DIFFICULTY],
+      [_("Hard"), HARD_DIFFICULTY],
+      [_("Extreme"), EXTREME_DIFFICULTY],
     ].freeze
 
     attr_reader :selected_variant, :selected_difficulty
@@ -40,7 +42,7 @@ module Sudoku
 
     def build
       tap do |dialog|
-        dialog.title = "New Game"
+        dialog.title = _("New Game")
         dialog.content_width = 410
         dialog.content_height = 490
         dialog.child = toolbar_view
@@ -95,7 +97,7 @@ module Sudoku
     def difficulty_list = @difficulty_list ||= boxed_list
 
     def start_button
-      @start_button ||= Gtk::Button.new(label: "Start Game").tap do |button|
+      @start_button ||= Gtk::Button.new(label: _("Start Game")).tap do |button|
         button.add_css_class("pill")
         button.add_css_class("suggested-action")
         button.halign = :center

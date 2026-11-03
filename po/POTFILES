@@ -1,0 +1,7 @@
+lib/sudoku/finished_page.rb
+lib/sudoku/game_over_page.rb
+lib/sudoku/game_setup_dialog.rb
+lib/sudoku/help_dialog.rb
+lib/sudoku/popover_manager.rb
+lib/sudoku/shortcuts_dialog.rb
+lib/sudoku/window.rb

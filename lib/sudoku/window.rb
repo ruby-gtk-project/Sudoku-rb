@@ -11,6 +11,7 @@ require_relative "loading_screen"
 require_relative "persistence"
 require_relative "preferences"
 require_relative "preferences_dialog"
+require_relative "translations"
 
 module Sudoku
   # Ported from upstream src/window.py and data/blueprints/window.blp.
@@ -21,12 +22,13 @@ module Sudoku
   # of the game being played.
   class SudokuWindow < Adwaita::ApplicationWindow
     type_register
+    include Gettext
 
     DIFFICULTY_LABELS = {
-      GameSetupDialog::EASY_DIFFICULTY    => "Easy",
-      GameSetupDialog::MEDIUM_DIFFICULTY  => "Medium",
-      GameSetupDialog::HARD_DIFFICULTY    => "Hard",
-      GameSetupDialog::EXTREME_DIFFICULTY => "Extreme",
+      GameSetupDialog::EASY_DIFFICULTY    => _("Easy"),
+      GameSetupDialog::MEDIUM_DIFFICULTY  => _("Medium"),
+      GameSetupDialog::HARD_DIFFICULTY    => _("Hard"),
+      GameSetupDialog::EXTREME_DIFFICULTY => _("Extreme"),
     }.freeze
 
     BREAKPOINTS = [
@@ -63,7 +65,7 @@ module Sudoku
 
     def build
       tap do |window|
-        window.title = "Sudoku"
+        window.title = _("Sudoku")
         window.add_css_class("sudoku-main-window")
         window.set_default_size(710, 810)
         window.set_size_request(360, 420)
@@ -229,12 +231,12 @@ module Sudoku
     def toolbar_view = @toolbar_view ||= Adwaita::ToolbarView.new
     def header_bar = @header_bar ||= Adwaita::HeaderBar.new
 
-    def sudoku_window_title = @sudoku_window_title ||= Adwaita::WindowTitle.new("Sudoku", "")
+    def sudoku_window_title = @sudoku_window_title ||= Adwaita::WindowTitle.new(_("Sudoku"), "")
 
     def home_button
       @home_button ||= Gtk::Button.new.tap do |button|
         button.icon_name = "go-previous-symbolic"
-        button.tooltip_text = "Back to Main Menu"
+        button.tooltip_text = _("Back to Main Menu")
         button.action_name = "win.back-to-menu"
       end
     end
@@ -242,14 +244,14 @@ module Sudoku
     def primary_menu_button
       @primary_menu_button ||= Gtk::MenuButton.new.tap do |button|
         button.icon_name = "open-menu-symbolic"
-        button.tooltip_text = "Menu"
+        button.tooltip_text = _("Menu")
       end
     end
 
     def pencil_toggle_button
       @pencil_toggle_button ||= Gtk::ToggleButton.new.tap do |button|
         button.icon_name = "document-edit-symbolic"
-        button.tooltip_text = "Toggle Pencil Mode"
+        button.tooltip_text = _("Toggle Pencil Mode")
       end
     end
 
@@ -291,14 +293,14 @@ module Sudoku
     end
 
     def continue_button
-      @continue_button ||= Gtk::Button.new(label: "Continue Game").tap do |button|
+      @continue_button ||= Gtk::Button.new(label: _("Continue Game")).tap do |button|
         button.use_underline = true
         button.add_css_class("pill")
       end
     end
 
     def new_game_button
-      @new_game_button ||= Gtk::Button.new(label: "New Game").tap do |button|
+      @new_game_button ||= Gtk::Button.new(label: _("New Game")).tap do |button|
         button.use_underline = true
         button.add_css_class("pill")
       end
@@ -367,12 +369,12 @@ module Sudoku
       def connect_buttons
         continue_button.tap do |button|
           button.signal_connect("clicked") { on_continue_clicked }
-          button.tooltip_text = "Continue Saved Game"
+          button.tooltip_text = _("Continue Saved Game")
           button.visible = Persistence.saved_game?
         end
         new_game_button.tap do |button|
           button.signal_connect("clicked") { on_new_game_clicked }
-          button.tooltip_text = "Start a New Game"
+          button.tooltip_text = _("Start a New Game")
         end
         pencil_toggle_button.signal_connect("toggled") { on_pencil_toggled_button }
         home_button.visible = false
@@ -453,7 +455,7 @@ module Sudoku
 
         if preferences && board && showing_game
           if pencil_toggle_button.active?
-            update_sudoku_window_subtitle("Pencil Mode • Note possible numbers")
+            update_sudoku_window_subtitle(_("Pencil Mode • Note possible numbers"))
           else
             @controller.update_subtitle
           end
@@ -463,13 +465,13 @@ module Sudoku
       def build_primary_menu(show_game_actions: true)
         Gio::Menu.new.tap do |menu|
           Gio::Menu.new.tap do |section|
-            section.append("Keyboard Shortcuts", "app.shortcuts")
+            section.append(_("Keyboard Shortcuts"), "app.shortcuts")
             if show_game_actions
-              section.append("Preferences", "win.show-preferences")
-              section.append("Auto Pencil Marks", "win.auto-pencil-marks")
+              section.append(_("Preferences"), "win.show-preferences")
+              section.append(_("Auto Pencil Marks"), "win.auto-pencil-marks")
             end
-            section.append("How To Play", "app.how_to_play")
-            section.append("About Sudoku", "app.about")
+            section.append(_("How To Play"), "app.how_to_play")
+            section.append(_("About Sudoku"), "app.about")
             menu.append_section(nil, section)
           end
           primary_menu_button.menu_model = menu
