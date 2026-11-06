@@ -18,10 +18,16 @@ game core, window, pages and dialogs from upstream*). All 13 component
 sections below are **present**; what remains is parity auditing inside each
 file, not missing files.
 
-Totals: 13 components, 13 present, 0 absent. The one axis still entirely
-unported is the translation catalogue — this fork has no `po/` directory, so
-all 5 upstream catalogues (de, fa, nl, vi, zh) and the `.pot` are missing and
-every string in `lib/` is an untranslated literal.
+Totals: 13 components, 13 present, 0 absent. The translation catalogue, the
+one axis this inventory previously recorded as entirely unported, has since
+landed (commit *Port the po/ translation catalogue and wire gettext into the
+UI*): `po/LINGUAS`, `po/POTFILES`, `po/sudokugame.pot` and the de/fa/nl/vi/zh
+catalogues are all present on `ruby`, alongside `lib/sudoku/translations.rb`,
+which both resolves the catalogue lookup and supplies the `Sudoku::Gettext`
+`_()`/`p_()` helpers mixed into the classes that show text.
+`test/drive_translations.rb` drives the app in German and checks the
+translations reach the widgets. See the updated "Non-UI upstream files" table
+and blockers #10–#11 below.
 
 ---
 
@@ -361,7 +367,7 @@ its own port file:
 | `src/log_utils.py` | `lib/sudoku/log_utils.rb` | the in-memory log buffer the About dialog's debug info shows |
 | `data/style.css`, `data/style-dark.css` | `lib/sudoku/style.rb` (or a loaded asset) | defines `sudoku-main-window`, `icon-dropshadow`, `sudoku-cell-button`, `clue-cell`, `entry-cell`, `note-cell-label`, `corner-label`, `highlight`, `wrong`, `correct`, `conflict`, `toggle-active`, `#sudoku-parent-grid`, `#sudoku-popover`, and the `large` / `compact-mode` / `small-mode` variants of the cell and grid rules |
 | `data/illustrations/*.svg`, `data/icons/**` | a port asset directory | 9 illustrations plus `back-symbolic` and `pencil-symbolic` |
-| `po/*` | the port's own catalogue | 5 catalogues (de, fa, nl, vi, zh) |
+| `po/*` | `po/*` (LINGUAS, POTFILES, sudokugame.pot, de/fa/nl/vi/zh.po) | **present** — ported verbatim; `lib/sudoku/translations.rb` loads the per-language `.po` directly (no libintl in a gem's runtime bundle) and also supplies the `Sudoku::Gettext` `_()`/`p_()` helpers mixed into the classes that show text |
 
 ---
 
@@ -395,11 +401,14 @@ its own port file:
 9. **Threaded generation.** Upstream generates on a `threading.Thread` and
    returns to the main loop via `GLib.idle_add`. The port needs the equivalent
    (`GLib::Idle.add` from a Ruby thread) or the loading screen is pointless.
-10. **Translations are entirely unported.** There is no `po/` directory on
-    `ruby`: no `.pot`, none of the 5 upstream catalogues, and no gettext call
-    in `lib/` — every user-visible string is a bare Ruby literal. This is the
-    only component axis with nothing ported at all, and it is the next unit of
-    work after per-file parity auditing.
+10. **Translations are now ported.** `po/` on `ruby` carries `LINGUAS`,
+    `POTFILES`, `sudokugame.pot` and the de/fa/nl/vi/zh catalogues, extracted
+    and merged via `rake pot`/`rake po`; `lib/sudoku/translations.rb` reads the
+    shipped `.po` files directly (no libintl in a gem's runtime bundle) and
+    the mixed-in `_()`/`p_()` wrap the strings upstream marks, including the
+    shortcuts dialog's `C_()` "shortcut window" context. What remains here is
+    parity auditing — confirming every upstream-marked string is wrapped and
+    every catalogue entry still matches — not porting from scratch.
 11. **Assets are partially ported.** `data/illustrations` and `data/icons`
     exist in the fork; the stylesheets are ported as Ruby in
     `lib/sudoku/style.rb` rather than loaded as CSS assets.
