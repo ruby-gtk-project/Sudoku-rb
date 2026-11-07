@@ -150,10 +150,69 @@ driver
   end
   .step("make a pencil note") do
     row, col = first_blank.call
+    note_cell = [row, col]
     window.controller.pencil_mode = true
     window.controller.fill_cell(row, col, "7")
     driver.check("note recorded", window.controller.board.get_notes(row, col).include?("7"))
     window.controller.pencil_mode = false
+  end
+  .step("wrong entry marks itself, and a duplicate flags a conflict") do
+    board = window.controller.board
+    blanks = board.size.times.flat_map { |r| board.size.times.map { |c| [r, c] } }
+      .select { |(r, c)| board.puzzle[r][c].nil? && board.user_inputs[r][c].nil? }
+    row, col = blanks.first
+    same_block = lambda do |(r, c)|
+      r / board.block_size == row / board.block_size && c / board.block_size == col / board.block_size
+    end
+    other = blanks.drop(1).find { |(r, c)| r == row || c == col || same_block.call([r, c]) }
+    dupe_row, dupe_col = other
+    # Avoid either cell's own correct answer, so the second fill cannot
+    # accidentally land on handle_correct_input instead of a conflict.
+    wrong_value = ((1..9).to_a -
+      [board.get_correct_value(row, col), board.get_correct_value(dupe_row, dupe_col)]).first
+    window.controller.fill_cell(row, col, wrong_value.to_s)
+    wrong_cell = window.controller.grid_manager.cells[row][col]
+    driver.check("wrong entry marked", wrong_cell.has_css_class?("wrong"))
+
+    # A cell holding the same number in a shared row/column/block is now a
+    # conflict — the Ruby port matches upstream: handle_wrong_input /
+    # _handle_wrong_input only ever auto-clear the "conflict" class on the
+    # cells they flag, never the "wrong" class on the cell itself (that is
+    # cleared on the next edit).
+    window.controller.fill_cell(dupe_row, dupe_col, wrong_value.to_s)
+    driver.check("duplicate entry flagged the first cell as a conflict", wrong_cell.has_css_class?("conflict"))
+    @conflict_cell = wrong_cell
+  end
+  .wait_until("conflict feedback clears after its timeout", attempts: 40) do
+    @conflict_cell && !@conflict_cell.has_css_class?("conflict")
+  end
+  .step("ctrl+arrow moves focus by a block, digit key fills via the keyboard") do
+    board = window.controller.board
+    size = board.size
+    # Needs a blank cell three columns from either edge, so the Ctrl+arrow
+    # jump is guaranteed to land inside the board rather than being dropped
+    # as out-of-bounds (which would leave the focus right where it started).
+    blanks = size.times.flat_map { |r| size.times.map { |c| [r, c] } }
+      .select { |(r, c)| board.puzzle[r][c].nil? && board.user_inputs[r][c].nil? }
+    row, col = blanks.find { |(_, c)| c <= size - 4 } || blanks.find { |(_, c)| c >= 3 }
+    keyval, target_col =
+      if col <= size - 4
+        [Gdk::Keyval::KEY_Right, col + 3]
+      else
+        [Gdk::Keyval::KEY_Left, col - 3]
+      end
+    window.controller.grid_manager.cells[row][col].grab_focus
+    handler = window.controller.input_handler
+    handler.on_key_pressed(keyval, Gdk::ModifierType::CONTROL_MASK, row, col)
+    moved_cell = window.controller.grid_manager.cells[row][target_col]
+    driver.check("ctrl+arrow moved focus three columns", window.focus == moved_cell)
+    key_row, key_col = first_blank.call
+    window.controller.grid_manager.cells[key_row][key_col].grab_focus
+    correct = window.controller.board.get_correct_value(key_row, key_col)
+    keyval = Gdk::Keyval.const_get("KEY_#{correct}")
+    handler.on_key_pressed(keyval, Gdk::ModifierType::new(0), key_row, key_col)
+    filled_cell = window.controller.grid_manager.cells[key_row][key_col]
+    driver.check("digit keypress filled the focused cell", filled_cell.value == correct)
   end
   .step("auto pencil marks") do
     window.on_auto_pencil_marks
@@ -162,6 +221,7 @@ driver
   end
   .step("open a cell popover") do
     row, col = first_blank.call
+    @popover_cell_coords = [row, col]
     window.controller.on_cell_click(
       row,
       col,
@@ -171,6 +231,40 @@ driver
   end
   .step("popover is up") do
     driver.check("popover manager has a grid", !window.controller.popover_manager.parent_grid.nil?)
+  end
+  .wait_until("popover widget becomes visible", attempts: 20) do
+    window.controller.popover_manager.get_or_create_popover.visible?
+  end
+  .step("popover shows per-number remaining counts and fills on selection") do
+    row, col = @popover_cell_coords
+    cell = window.controller.grid_manager.cells[row][col]
+    board = window.controller.board
+    popover = window.controller.popover_manager.get_or_create_popover
+    remaining = board.get_remaining_valid_inputs
+    driver.check("remaining valid inputs is a 9-entry count", remaining.size == 9)
+    correct = board.get_correct_value(row, col)
+    window.controller.popover_manager.on_number_selected(correct.to_s, cell, popover, 1)
+    driver.check("popover number selection filled the cell", cell.value == correct)
+    driver.check("popover popped down on a left-click selection", !popover.visible?)
+  end
+  .step("popover Clear button clears a pencilled cell") do
+    row, col = first_blank.call
+    cell = window.controller.grid_manager.cells[row][col]
+    board = window.controller.board
+    # Auto pencil marks (a prior step) may have already toggled "4" on for
+    # this cell; fill_cell's note path toggles, so start from a known-empty
+    # set of notes rather than assume the toggle adds.
+    board.notes[row][col].clear
+    cell.update_notes(board.get_notes(row, col))
+    window.controller.pencil_mode = true
+    window.controller.fill_cell(row, col, "4")
+    driver.check("note present before clearing", board.get_notes(row, col).include?("4"))
+    window.controller.pencil_mode = false
+    window.controller.on_cell_click(row, col, 1, 1)
+    popover = window.controller.popover_manager.get_or_create_popover
+    window.controller.popover_manager.on_clear_selected(cell, popover)
+    driver.check("Clear button emptied the notes", window.controller.board.get_notes(row, col).empty?)
+    driver.check("Clear button popped the popover down", !popover.visible?)
   end
   .step("open the preferences dialog") do
     Sudoku::PreferencesDialog.new(-> {}).tap do |dialog|
