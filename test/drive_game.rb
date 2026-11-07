@@ -109,6 +109,17 @@ application = Sudoku::Application.new
 window = nil
 driver = Driver.new(application)
 
+# Every widget in a subtree, depth-first, regardless of how the container
+# lays its children out (Gtk::Grid, Gtk::Overlay, Gtk::Box, ...).
+descendants = lambda do |widget, &visit|
+  child = widget.first_child
+  while child
+    visit.call(child)
+    descendants.call(child, &visit)
+    child = child.next_sibling
+  end
+end
+
 # The first cell that is neither a clue nor already filled in.
 first_blank = lambda do
   board = window.controller.board
@@ -122,16 +133,13 @@ driver
     driver.check("main menu showing", window.stack.visible_child == window.main_menu_box)
     driver.check("new game button there", !window.new_game_button.nil?)
   end
-  .step("open the new game dialog") do
-    Sudoku::GameSetupDialog.new(->(variant, difficulty) { [variant, difficulty] }).tap do |dialog|
+  .step("open the new game dialog and start via its own Start Game button") do
+    Sudoku::GameSetupDialog.new(window.method(:on_game_setup_selected)).tap do |dialog|
       dialog.present(window)
       driver.check("dialog defaults to classic/easy", dialog.selected_variant == "classic")
-      dialog.close
+      dialog.start_button.signal_emit("clicked")
+      driver.check("loading screen showing", window.stack.visible_child == window.loading_screen)
     end
-  end
-  .step("start a classic easy game") do
-    window.on_game_setup_selected("classic", Sudoku::GameSetupDialog::EASY_DIFFICULTY)
-    driver.check("loading screen showing", window.stack.visible_child == window.loading_screen)
   end
   .wait_until("classic puzzle generated") { window.stack.visible_child == window.game_scrolled_window }
   .step("grid is up") do
@@ -266,6 +274,43 @@ driver
     driver.check("Clear button emptied the notes", window.controller.board.get_notes(row, col).empty?)
     driver.check("Clear button popped the popover down", !popover.visible?)
   end
+  .step("popover shows remaining-count badges and goes insensitive at zero, Done closes it") do
+    row, col = first_blank.call
+    cell = window.controller.grid_manager.cells[row][col]
+    board = window.controller.board
+    forced_remaining = board.get_remaining_valid_inputs.merge(1 => 0)
+    preferences = Sudoku::PreferencesManager.get_preferences
+    preferences.general_toggles["show_remaining_valid_inputs"]["value"] = true
+    window.controller.popover_manager.show_popover(cell, forced_remaining, Sudoku::PopoverManager::RIGHT_BUTTON)
+    driver.check("popover with forced counts becomes visible", true)
+  end
+  .wait_until("forced-count popover widget becomes visible", attempts: 20) do
+    window.controller.popover_manager.get_or_create_popover.visible?
+  end
+  .step("inspect the popover's number grid for badges, the zero-count button, and Done") do
+    popover = window.controller.popover_manager.get_or_create_popover
+    buttons = []
+    labels = []
+    descendants.call(popover.child) do |widget|
+      if widget.is_a?(Gtk::Button)
+        buttons << widget
+      elsif widget.is_a?(Gtk::Label)
+        labels << widget
+      end
+    end
+    button_one = buttons.find { |button| button.label == "1" }
+    driver.check("number 1 button exists and is insensitive at zero remaining", button_one && !button_one.sensitive?)
+    badge_labels = labels.select { |label| label.has_css_class?("corner-label") }
+    driver.check("at least one corner-label badge renders over a number button", !badge_labels.empty?)
+    driver.check(
+      "a badge shows a positive remaining count",
+      badge_labels.any? { |label| label.label.to_i.positive? },
+    )
+    done_button = buttons.find { |button| button.label == "Done" }
+    driver.check("Done button is present for a right-click popover", !done_button.nil?)
+    done_button.signal_emit("clicked")
+    driver.check("Done button popped the popover down", !popover.visible?)
+  end
   .step("open the preferences dialog") do
     Sudoku::PreferencesDialog.new(-> {}).tap do |dialog|
       dialog.present(window)
@@ -335,6 +380,16 @@ driver
   .step("finished page") do
     driver.check("finished page showing", window.stack.visible_child == window.finished_page)
     driver.check("save cleared", !Sudoku::Persistence.saved_game?)
+  end
+  .step("finished page illustration swaps with the colour scheme") do
+    manager = Adwaita::StyleManager.default
+    manager.color_scheme = :force_light
+    light_file = window.finished_page.picture.file.path
+    driver.check("light illustration picked while forced light", light_file.end_with?("celebration-light.svg"))
+    manager.color_scheme = :force_dark
+    dark_file = window.finished_page.picture.file.path
+    driver.check("dark illustration picked while forced dark", dark_file.end_with?("celebration-dark.svg"))
+    manager.color_scheme = :default
   end
   .step("start a game to lose") do
     window.on_game_setup_selected("diagonal", Sudoku::GameSetupDialog::EASY_DIFFICULTY)
