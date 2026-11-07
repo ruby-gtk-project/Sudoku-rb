@@ -1,91 +1,119 @@
 # Accountability ensurance — Sudoku-rb
 
-## Grep for excuse language
+| | |
+|---|---|
+| Upstream | `main` @ `2be119d` |
+| Port | `ruby` @ `b0a9d76` |
+
+## Grep for excuse language — re-run fresh this round
 
 ```
-grep -rniE "TODO|FIXME|not implemented|for now|in a future|not yet|unimplemented|placeholder|stub|dropped deliberately|not applicable|no ruby analogue|out of scope|not needed|by design|by choice|deliberate simplification|streamlined|modernised away|bindings do not support|upstream's own TODO|skipped" lib exe .reports PORTING.md AGENTS.md CLAUDE.md
+grep -rniE "TODO|FIXME|not implemented|for now|in a future|not yet|unimplemented|placeholder\b|stub\b|dropped deliberately|not applicable|no ruby analogue|out of scope|not needed|by design|by choice|deliberate simplification|streamlined|modernised away|bindings do not support|skipped" lib exe .reports PORTING.md AGENTS.md CLAUDE.md
 ```
 
-No `PORTING.md` exists on `ruby`. No hit in `lib/`, `exe/`, `AGENTS.md`,
-`CLAUDE.md` matches an excuse construction. The one incidental match in
-`lib/sudoku/popover_manager.rb:151` ("allocation when the two are not yet
-related") is a comment about GTK widget-allocation timing, not an excuse for
-missing work — read in context, it explains *why* a position calculation is
-deferred to an idle callback, not that a feature was skipped. No hit in this
-codebase is a gap wearing a justification. **On the excuse-language axis
-specifically, the port is clean.**
+No `PORTING.md` exists on `ruby` (still true). No hit in `lib/`, `exe/`,
+`AGENTS.md`, `CLAUDE.md` is an excuse construction. Two new hits since the
+last round, both read in context and both benign:
 
-## The actual accountability problem found this round: a false-green risk, not an excuse
+- `lib/sudoku/popover_manager.rb:135` — `LogUtils.logger.debug("Popover
+  popdown skipped")`: a debug log line fired when a popdown is a no-op
+  because the popover is already closed, not a comment admitting a missing
+  feature.
+- `lib/sudoku/sudoku_cell.rb:181` — "a redundant switch is skipped so the
+  notes are not rebuilt for nothing": a performance short-circuit comment,
+  not a scope cut.
 
-This skill also covers "whenever a parity ledger cites a document as
-authority for a gap" and "a green claim that rests on something never
-executed" — the second of which this round found, twice:
+The pre-existing `popover_manager.rb:151` comment ("allocation when the two
+are not yet related") is unchanged and is still GTK allocation-timing prose,
+not an excuse. **On the excuse-language axis, the port remains clean.**
 
-1. **`.reports/component-inventory.md`'s own status line.** Before this
-   round, it stated "Every user-facing component now has a port file... All
-   13 component sections below are **present**" and treated that as the
-   headline. Read literally that is true — every file exists — but a reader
-   skimming only that line would walk away believing the UI is done. It is
-   not an excuse (nothing is blamed on upstream, nothing is called "out of
-   scope"), but it is the same failure mode in miniature: a status claim
-   that invites a reader to stop checking. `.reports/component-parity.md`
-   (this round) names, component by component, which of those 13-plus-7
-   non-UI files were actually driven versus merely opened-and-closed by
-   `test/drive_game.rb` with zero assertions — preferences dialog, how-to-
-   play dialog, shortcuts dialog's own presentation, and the whole
-   `application.rb`/About-dialog surface. "Present" was true; "done" was not
-   demonstrated, and the inventory's own phrasing did not distinguish the
-   two.
+## The false-green question, re-asked against this round's own evidence rather than against commit messages
 
-2. **The runtime gate itself: `drive_ok=true, 31 checks passed, 0 failed,
-   covering 20 components`.** This is the literal green claim the task
-   asked this audit to treat with suspicion rather than accept. It is
-   accurate as a report of what ran — both drivers were re-executed this
-   round and both do print `DRIVE OK` with exactly those counts. The false-
-   green risk is in how "covering 20 components" reads: it is true that 20
-   component files are *touched* by a `step` in one driver or the other, but
-   as `.reports/component-parity.md` shows, 4 of those 20 are touched with
-   **no check at all** following the touch (preferences, help dialog,
-   shortcuts dialog, and — not even touched — `application.rb`), and a
-   further 6 have no coverage of their most consequential behaviour (cell
-   feedback timeouts, popover badges, the full keyboard map, variant
-   preference toggles, the stylesheet, the log buffer). A reader who takes
-   "31/31, covering 20 components" as "the UI is verified" has been misled
-   by the word "covering" doing more work than the evidence supports. The
-   fix is not a smaller number — it is the per-component breakdown in
-   `.reports/component-parity.md`, which this round produced specifically
-   so "covering 20 components" cannot be read as "20 components verified"
-   again.
+Every claim in this round's four companion reports was independently
+re-executed rather than taken from a commit message or a prior report:
 
-3. **The RSpec suite has never successfully run, in any commit on this
-   branch, and nothing in the repo says so until this round.** `rake spec` /
-   the devshell's own named run command fails at `require "kettle/test/
-   rspec"` before collecting a single example (`.reports/test-parity.md` has
-   the transcript). There is no green claim resting on this *in this repo*
-   — no commit message or report claimed the spec suite passes — but the
-   devshell banner presents the command as a thing you can run, and a port
-   that is "finished" while its only unit-test entry point has never worked
-   is exactly the gap this skill exists to surface before anyone writes a
-   summary that omits it.
+- `nix develop --command xvfb-run -a ruby test/drive_game.rb` → `DRIVE OK`,
+  41 `ok` lines, re-run directly, not copied from `b0a9d76`'s commit message.
+- `nix develop --command xvfb-run -a ruby test/drive_translations.rb` →
+  `DRIVE OK`, 9 `ok` lines, re-run directly.
+- `nix develop --command xvfb-run -a rspec` → `113 examples, 0 failures`,
+  re-run directly. Last round this command (then written slightly
+  differently in the devshell banner) failed at `require "kettle/test/
+  rspec"` before collecting a single example — that failure is gone, and the
+  banner itself now prints `run the specs: xvfb-run rspec` rather than the
+  longer `ruby -e '...'` form the old banner used, confirming the devshell
+  itself changed, not just the test files.
+- The two previously-missing po msgids were grepped directly out of
+  `po/sudokugame.pot` and all five `.po` files, not inferred from the "fixed"
+  commit message.
+- The 113-vs-113 test census was counted from `git show origin/main:tests/
+  *.py` and `spec/*_spec.rb` directly, file by file, not accepted as a round
+  number.
+
+41 + 9 = 50, matching the runtime gate's "50 checks ... covering 22
+components" exactly, and 22 of the port's 25 `lib/sudoku/*.rb` files are
+genuinely touched by one of those three test entry points (confirmed in
+`.reports/component-parity.md`) — `style.rb`, `log_utils.rb`, and the
+non-census `rb.rb` entry point are the three left out, and that is named
+explicitly rather than folded into "22 covered" meaning "22 fully verified".
+**This round's gate figures are not a false green** — they were reproduced,
+not relayed.
+
+## Where a false-green risk still exists, named precisely
+
+1. **"Covering 22 components" still invites over-reading**, for the same
+   reason the last round flagged "covering 20 components": "touched by a
+   test" is not "all four axes verified". `.reports/component-parity.md`
+   this round names, per unit, exactly which of those 22 have real
+   assertions behind every behaviour versus a touch-and-no-check or a
+   touch-and-partial-check — the popover's badge widget, insensitive-at-0
+   state and Done button; `input_handler.rb`'s RTL mirroring and ghost-click
+   guard; `finished_page.rb`'s dark/light swap; `game_setup_dialog.rb`'s own
+   Start-button click path. None of these are claimed as verified anywhere
+   in this round's reports, but a reader who stops at "50/50, covering 22
+   components" without opening `component-parity.md` would still walk away
+   with a rosier picture than the evidence supports — exactly the risk named
+   last round, now narrower in scope but not eliminated.
+2. **`style.rb` and `log_utils.rb` have zero coverage of any kind** — not
+   partial, zero. Nothing in this repo claims otherwise, but it is worth
+   stating plainly rather than letting "22 of 25 covered" imply the
+   remaining 3 are a rounding error: `rb.rb` is harmless (build plumbing,
+   not a ported upstream unit), but `style.rb` and `log_utils.rb` are real
+   ported upstream units (`data/style.css`/`style-dark.css` and
+   `src/log_utils.py`) with real, if narrow, behavioural content
+   (the dangling `sudoku-block` class reproduction; the in-memory log buffer
+   feeding the About dialog's debug info) that no spec and no driver step
+   touches.
+3. **The generator-contract test substitution in `spec/generator_contract_spec.rb`**
+   (documented in `.reports/test-parity.md`) is disclosed in the spec file's
+   own header comment and in this round's reports, which is the correct
+   behaviour per this skill — a substitution that is explained rather than
+   silently counted as "ported" is not an excuse. It is named here only so a
+   future pass does not read "113/113" as "113 byte-identical tests" without
+   checking that one is a deliberate, documented, behaviourally-equivalent
+   swap.
 
 ## What this round is not claiming
 
 Nobody in this repo's history wrote "dropped deliberately", "not
-applicable", "out of scope", or any of this skill's listed constructions.
-The accountability failure found here is narrower and more specific than
-that: a true statement ("present", "31 checks passed") was reused as if it
-answered a broader question ("is this component correct", "is this gate a
-verification of the whole UI") that it does not answer. That gap is now
-closed by `.reports/component-parity.md` and `.reports/test-parity.md`
-naming, per component and per test file, what was and was not actually
-checked.
+applicable", "out of scope", or any of this skill's listed excuse
+constructions, and nobody this round wrote a claim this round's direct
+re-execution failed to reproduce. The accountability work this round found
+is: the prior round's two concrete false-green risks (the stale "13/13
+present" inventory headline, and the RSpec suite having never run) are both
+now resolved with evidence, not just reasserted — and the gate's "covering N
+components" framing still needs the per-component breakdown next to it, every
+round, because the number itself will always undercount what "covered" needs
+to mean.
 
 ## Verdict
 
-Not clean, on the "false green" axis specifically — not because anyone
-wrote a dishonest sentence, but because two true, narrow claims
-("file present", "31/31 drive checks") were standing in for a broader claim
-("the UI has parity", "the port is tested") that neither one supports. No
-excuse-language hit. The grep this skill runs is clean; the inference a
-reader would draw from the gate and the existing inventory is not, and that
-inference is this report's actual finding.
+Mostly clean. No excuse-language hit survives reading in context. The
+specific false-green risks named last round (a stale status headline, a
+never-run test command) are both independently reproduced as fixed this
+round, not merely reasserted. The residual risk is the same shape as last
+round, just smaller: "50 checks ... covering 22 components" is accurate as a
+count of what ran, and would still be misread as "22 components fully
+verified" by anyone who does not also read `.reports/component-parity.md`'s
+per-unit breakdown — which is why that breakdown exists and is repeated here
+rather than assumed understood.

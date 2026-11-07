@@ -3,111 +3,104 @@
 | | |
 |---|---|
 | Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `5ee083b` |
-| Upstream tests | 6 files, census below |
-| Ported | **0** |
-| Gaps | **all of them** |
-| Test command | `rake spec` / the devshell's banner command — **does not run**, see below |
+| Port | `ruby` @ `b0a9d76` |
+| Upstream tests | 6 files, 113 `def test_*` methods total |
+| Ported | **113 of 113**, one Ruby `it` per upstream `def test_*`, same file grouping |
+| Suite actually runs | **yes** — re-run directly this round, not inferred |
+| Test command | `nix develop --command xvfb-run -a rspec` (the devshell banner's own command) |
 
-## Upstream census
+## This round's verification, independent of the commit message
 
-Upstream's own build declares and runs a real unit-test suite, independent
-of the `test/drive_*.rb`-style manual scripts this port has:
-
-```
-pytest.ini
-tests/conftest.py
-tests/meson.build
-tests/test_board_conflicts.py
-tests/test_board_core.py
-tests/test_board_serialization.py
-tests/test_generator_contract.py
-tests/test_input_handler.py
-tests/test_preferences.py
-```
-
-Sampled `tests/test_board_core.py`: real `pytest` classes (`TestIsClue`,
-`TestGetCorrectValue`, …) asserting specific board behaviours — clue
-detection, correct-value lookup — against literal puzzle/solution fixtures
-built through `tests/conftest.py`'s `make_board_state`. This is upstream's
-unit-test layer for exactly the logic the port's `lib/sudoku/board.rb`,
-`lib/sudoku/generator.rb`, `lib/sudoku/preferences.rb`,
-`lib/sudoku/input_handler.rb` and `lib/sudoku/classic_sudoku.rb` /
-`diagonal_sudoku.rb` claim to have ported. A full name-by-name census (every
-`def test_*` across the six files) was not completed to individual test
-granularity this round because the count at the file level already settles
-the question below; it should still be done before any of these are closed.
-
-## Port side
+The commit that claims this (`a1192eb`, "Port the upstream RSpec suite and
+fix the devshell's test harness") says "113 examples, 0 failures". That claim
+was re-run from scratch this round rather than trusted:
 
 ```
-find . -iname '*_spec.rb' -o -iname 'test_*.rb' -o -iname '*_test.rb'
+nix develop --command xvfb-run -a rspec
+# Randomized with seed ...
+# .................................................................................................................
+# Finished in 9.14 seconds (files took 8.09 seconds to load)
+# 113 examples, 0 failures
 ```
 
-finds nothing. `spec/` holds only the kettle-jem scaffold
-(`spec/spec_helper.rb`, `spec/README.md`) with **zero `*_spec.rb` files**.
-`test/` holds `test/drive_game.rb` and `test/drive_translations.rb` — both
-are manual, no-assertion-framework driver scripts of the kind this skill
-explicitly excludes from a census (`*driver*` is on the harness-file
-exclusion list) and which are integration smoke tests of the running GTK
-app, not unit tests of board/generator/preferences/input-handler logic.
-Neither driver imports, calls, or in any way exercises
-`Sudoku::Board#is_clue?`, `#get_correct_value`, conflict detection, the
-generator's difficulty contract, or `Sudoku::Preferences` in isolation —
-they only touch that logic indirectly, through whatever a scripted game
-happens to do.
+Reproduces. This is a real change from the state the prior report recorded:
+previously `require "kettle/test/rspec"` raised `LoadError` before collecting
+a single example, because the devshell had no path to that gem. `a1192eb`
+added a separate test-only `nix/test/` bundlerEnv (kept out of
+`packages.default`'s closure) that resolves it, and added
+`lib/sudoku/rb.rb`, the entry point `spec/spec_helper.rb` requires
+(`require "sudoku/rb"`), which previously did not exist either. Both of
+those specific claims were checked by reading the files, not just by the
+suite now passing.
 
-**Zero of the six upstream pytest files has a Ruby counterpart of any kind.**
-Parity is 0/6 files (and 0 of however many individual `def test_*` cases they
-contain — stop here rather than pad a per-test table, matching this skill's
-"When upstream has no tests" degenerate-ledger guidance, inverted: here
-upstream has tests and the port inherited none of them).
+## File-by-file census, counted directly rather than at the file level only
 
-## The suite does not run — this is not merely "0 tests", it is "cannot run"
-
-The devshell banner (`flake.nix` `shellHook`) names the run command:
+Last round's report explicitly stopped at a file-level count ("a full
+name-by-name census ... was not completed ... it should still be done before
+any of these are closed"). This round did it:
 
 ```
-ruby -e 'require "rspec/core"; exit RSpec::Core::Runner.run(["--format", "progress", "--require", "spec_helper", "spec"])'
+for f in test_board_conflicts test_board_core test_board_serialization \
+         test_generator_contract test_input_handler test_preferences; do
+  git show origin/main:tests/$f.py | grep -c '^    def test_'
+done
 ```
 
-Running it inside `nix develop`:
+| Upstream file | `def test_*` count | Port file | `it "test_..."` count |
+|---|---:|---|---:|
+| `tests/test_board_conflicts.py` | 11 | `spec/board_conflicts_spec.rb` | 11 |
+| `tests/test_board_core.py` | 24 | `spec/board_core_spec.rb` | 24 |
+| `tests/test_board_serialization.py` | 30 | `spec/board_serialization_spec.rb` | 30 |
+| `tests/test_generator_contract.py` | 4 | `spec/generator_contract_spec.rb` | 4 |
+| `tests/test_input_handler.py` | 20 | `spec/input_handler_spec.rb` | 20 |
+| `tests/test_preferences.py` | 24 | `spec/preferences_spec.rb` | 24 |
+| **Total** | **113** | | **113** |
 
-```
-Failure/Error: require "kettle/test/rspec"
-LoadError:
-  cannot load such file -- kettle/test/rspec
-No examples found.
-Finished in 0.00005 seconds (files took 0.09392 seconds to load)
-0 examples, 0 failures, 2 errors occurred outside of examples
-```
+Every port spec names its `it` block after the upstream `def test_*` it was
+ported from (confirmed by reading all six spec files), so this is a real
+name-preserving 1:1 census, not a count that happens to match.
 
-`spec/spec_helper.rb` (line 23) requires `kettle/test/rspec`, which is not
-resolvable in this devshell's gem environment. The RSpec harness the project
-scaffolding installed has never successfully loaded, let alone run a test,
-in this environment — confirmed by running it directly, not inferred from
-absence. This is independent of the 0/6 file-count gap above: even if the
-six pytest files were ported to `spec/*_spec.rb` today, the harness as
-currently configured would still fail before reaching a single example.
+## The one deliberate substitution, and why it is not an excuse
 
-## What test parity requires here
+`tests/test_generator_contract.py` mocks `PuzzleGenerator.make_puzzle` (from
+the third-party `sudoku` PyPI package upstream depends on) and asserts which
+`sudoku_cls` keyword argument it was called with. The port's
+`lib/sudoku/generator.rb` has no such dependency to mock — it builds puzzles
+itself via its own `GridSolver`. `spec/generator_contract_spec.rb` keeps both
+upstream test names and keeps the "returns two 9×9 lists" shape assertion
+unchanged, and replaces the `sudoku_cls`-kwarg assertion with the port's own
+equivalent seam: which `extra_units` the variant's generator enforces (empty
+for Classic, the two main diagonals for Diagonal). This is documented in the
+spec file's own header comment, is a like-for-like behavioural substitution
+(same contract — "does this variant's generator enforce the right extra
+constraints" — checked through the port's actual API instead of a mock of a
+dependency the port doesn't have), and is not reported in this ledger as
+"ported" without comment — it is called out explicitly here and in the
+file.
 
-1. Fix `spec/spec_helper.rb` / the bundle so `rake spec` can load and run
-   at all — currently 0 examples run for a reason that has nothing to do
-   with whether specs exist.
-2. Census all `def test_*` methods in the six `tests/test_*.py` files
-   individually (not just at the file level, as done here) and give each one
-   a named Ruby counterpart under `spec/`, one file per upstream file, per
-   this skill's "keep the upstream suite's file structure" rule.
-3. Re-run the port's census script against the result and report the two
-   counts, not an adjective.
+## What is still not covered
+
+- No `PORTING.md` exists on `ruby` (checked again this round) — nothing to
+  cross-reference against a porting log, which is itself fine, but means
+  this report is the only record of the generator-contract substitution
+  above; it should not be allowed to drift from the spec file's own comment.
+- The two `test/drive_*.rb` scripts remain real integration smoke tests (not
+  unit tests) and are reported separately — see `.reports/component-parity.md`
+  for what they do and do not assert. They are not part of the 113/113 count
+  above and should not be added to it.
+- Upstream's `tests/conftest.py` fixture helpers (`make_board_state`, etc.)
+  were not ported as a shared file; each Ruby spec builds its own fixtures
+  inline or via a local `let`/helper. This was not checked for whether it
+  caused any duplicated-but-divergent fixture logic across the six spec
+  files — a structural tidiness question, not a parity gap, since all 113
+  examples pass.
 
 ## Verdict
 
-Not clean. 0/6 upstream test files ported, and the one command the devshell
-names for running specs fails before collecting a single example. The two
-`test/drive_*.rb` scripts are real and do pass (confirmed by direct run,
-`DRIVE OK` both times), but they are integration smoke tests the port wrote
-for itself — they belong under an `## Extra` list, not against this ledger's
-count, and they inherit none of upstream's pinned board/generator/
-preferences/input-handler behaviour.
+Clean on this axis. 113 of 113 upstream unit tests have a named Ruby
+counterpart, the count matches at the individual-test level (not just the
+file level), and the suite was independently re-run this round and genuinely
+passes — `rspec` is no longer a command that fails before collecting a single
+example, which was last round's root finding. The one substitution
+(generator contract) is documented, behaviourally equivalent, and disclosed
+rather than hidden.

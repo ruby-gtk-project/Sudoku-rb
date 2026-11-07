@@ -3,39 +3,36 @@
 | | |
 |---|---|
 | Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `5ee083b` |
+| Port | `ruby` @ `b0a9d76` |
 
-This round re-opened `.reports/component-inventory.md` (written on a prior
-pass) rather than re-walking the whole tree from zero, because that document
-already does the Step 1–5 work correctly: it finds the `.blp` templates
-first, unions each upstream `.py`+`.blp` pair into one port file, lists
-widgets with their CSS classes, signals and notes, and calls out repeaters
-and conditionals instead of hiding them. Spot checks against
-`git show origin/main:<path>` for `src/screens/finished_page.py`,
-`src/screens/help_dialog.py` and `data/blueprints/window.blp` confirm its
-widget/CSS/signal rows are accurate, and every `lib/sudoku/*.rb` file it
-names exists on `ruby` at the line count it claims.
+Upstream has not moved since the last round (`origin/main` is still `2be119d`),
+so `.reports/component-inventory.md`'s census is re-checked for drift against
+the port, not re-walked from zero. Re-spot-checked this round:
 
-Two corrections this pass made to the existing document's own bookkeeping,
-not to its component rows:
+- Every `lib/sudoku/<thing>.rb` the inventory names still exists.
+- The port gained one new file since the inventory was written,
+  `lib/sudoku/rb.rb` — the gem's `require "sudoku/rb"` entry point that
+  `spec/spec_helper.rb` needs. It is not a ported upstream unit (upstream has
+  no equivalent single-file entry point); it is build plumbing, correctly
+  outside the 13-UI/11-non-UI census.
+- `po/LINGUAS` still lists `de, fa, nl, vi, zh` — the previously-noted stale
+  blocker (ports omitting `de`) was already corrected before the last round
+  and remains correct.
+- The two msgids `.reports/translation-parity.md` found missing from
+  `po/sudokugame.pot` last round (`help_dialog.rb`'s two multi-line `_()`
+  calls) are now present in the pot and all five `.po` files — see
+  `.reports/translation-parity.md` for the verification.
 
-1. **Blocker #4 is stale.** The inventory still says "`po/LINGUAS` omits
-   `de`". `po/LINGUAS` on `ruby` now lists `de`, `fa`, `nl`, `vi`, `zh` — five
-   entries, alphabetical, `de` included. This was fixed after the inventory
-   was last written and the inventory was not updated to say so.
-2. **The "13 components, 13 present" status summary is a file-existence
-   count, not a parity count.** Every `lib/sudoku/<thing>.rb` named in the
-   inventory exists, but "present" here only means Step 1–3 (the file is
-   there, the widgets are named). It does not mean Step 4–5 of
-   `component-identification` (reading for repeaters/conditionals/dynamic CSS)
-   was done *on the port side* to the same depth as the upstream side, and it
-   says nothing about whether the port's widgets carry the same behaviour —
-   that comparison is `component-parity`'s job and is reported separately in
-   `.reports/component-parity.md`. Treat "present" in the existing inventory
-   as "a port file exists for this upstream unit", not as "ported correctly".
-
-No new upstream file was found missing a port-side counterpart beyond what
-the existing inventory already lists as present. The unit list (13 UI
-sections + 11 non-UI files) is accepted as this round's census; what changed
-this round is the parity comparison run against it, in the four companion
-reports.
+No new upstream file was found missing a port-side counterpart. The unit list
+(13 UI sections + 11 non-UI files, 25 `lib/sudoku/*.rb` files total once
+`rb.rb` is excluded as non-census plumbing) is unchanged from last round.
+What changed this round is how much of that census has actual runtime
+verification behind it — that comparison is `component-parity`'s job, and the
+answer moved substantially since the last report (see
+`.reports/component-parity.md`): the port went from 0/6 upstream test files
+ported and an RSpec harness that could not load, to 113/113 example-for-example
+parity with upstream's own `def test_*` count, actually executed. The
+identification-level finding from last round (file existence ≠ parity) still
+holds and is still the right line to draw — it is just that more of the
+previously-"present-only" units now have axis-4/5 evidence behind them than
+they did.
