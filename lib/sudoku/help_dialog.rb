@@ -19,10 +19,7 @@ module Sudoku
       [
         "basics.svg",
         _("The Basics"),
-        _(
-          "The board is a 9×9 grid, divided into nine 3×3 blocks. " \
-            "Fill every cell with numbers from 1 to 9.",
-        ),
+        _("The board is a 9×9 grid, divided into nine 3×3 blocks. Fill every cell with numbers from 1 to 9."),
       ],
       [
         "rows-and-columns.svg",
@@ -37,10 +34,7 @@ module Sudoku
       [
         "casual.svg",
         _("Casual Mode"),
-        _(
-          "Turn on Casual Mode in Preferences to check your entries against the " \
-            "solution. When off, only rule violations are flagged, not incorrect numbers.",
-        ),
+        _("Turn on Casual Mode in Preferences to check your entries against the solution. When off, only rule violations are flagged, not incorrect numbers."),
       ],
       [
         "mistake.svg",

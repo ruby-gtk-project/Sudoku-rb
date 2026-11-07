@@ -173,17 +173,43 @@ driver
     driver.check("popover manager has a grid", !window.controller.popover_manager.parent_grid.nil?)
   end
   .step("open the preferences dialog") do
-    window.on_show_preferences
+    Sudoku::PreferencesDialog.new(-> {}).tap do |dialog|
+      dialog.present(window)
+      switch = dialog.general_group.controls["casual_mode"]
+      was_active = switch.active?
+      switch.active = !was_active
+      preferences = Sudoku::PreferencesManager.get_preferences
+      driver.check(
+        "preferences switch flips PreferencesManager state",
+        preferences.general_toggles["casual_mode"]["value"] == !was_active,
+      )
+      dialog.close
+    end
   end
   .step("open the how to play dialog") do
     Sudoku::HowToPlayDialog.new.tap do |dialog|
       dialog.present(window)
+      first_page_status = dialog.carousel.get_nth_page(0).last_child
+      driver.check("carousel first page title", first_page_status.title == "The Basics")
       dialog.close
     end
   end
   .step("open the shortcuts dialog") do
-    Sudoku::ShortcutsDialog.build.tap do |dialog|
+    groups = Sudoku::ShortcutsDialog::SECTIONS.map do |(title, items)|
+      Sudoku::ShortcutsDialog.section(title, items)
+    end
+    Adwaita::ShortcutsDialog.new.tap do |dialog|
+      groups.each { |group| dialog.add(group) }
       dialog.present(window)
+      driver.check("shortcuts section title", groups.first.title == "Game")
+      dialog.close
+    end
+  end
+  .step("open the about dialog") do
+    application.about_dialog.tap do |dialog|
+      dialog.present(window)
+      driver.check("about dialog debug info names the app", dialog.debug_info.include?("Sudoku"))
+      driver.check("about dialog debug info names Ruby", dialog.debug_info.include?("Ruby #{RUBY_VERSION}"))
       dialog.close
     end
   end

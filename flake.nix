@@ -106,6 +106,17 @@
           gemdir = ./nix;
         };
 
+        # kettle-test (spec/spec_helper.rb's `require "kettle/test/rspec"`) and
+        # its dependency chain (rspec, appraisal2, turbo_tests2, …) are test-only
+        # — kept out of `gems` above so they never enter packages.default's
+        # closure. Pinned from nix/test/Gemfile + nix/test/Gemfile.lock.
+        testGems = pkgs.bundlerEnv {
+          name = "Sudoku-test-gems";
+          ruby = pkgs.ruby_3_4;
+          inherit gemConfig;
+          gemdir = ./nix/test;
+        };
+
         # The launcher is whatever the gemspec installs into exe/. Reading the
         # directory keeps this flake generic: no name to keep in step by hand.
         launcher = builtins.head (builtins.attrNames (builtins.readDir ./exe));
@@ -184,6 +195,11 @@
           packages = [
             gems
             gems.wrappedRuby
+            # Not testGems.wrappedRuby: that would shadow `ruby` on PATH with
+            # a bundle frozen to kettle-test alone, breaking `ruby exe/sudoku`
+            # (which needs gtk4/adwaita from `gems`). Only its gem binstubs
+            # (bin/rspec, etc.) are wanted here.
+            testGems
             pkgs.bundler
             pkgs.bundix
             pkgs.pkg-config
@@ -193,8 +209,6 @@
             # to support Ruby but only shells out to this, so without it
             # `xgettext --language=Ruby` fails.
             pkgs.rubyPackages_3_4.gettext
-            # The spec runner. The suite is plain RSpec, so this is enough.
-            pkgs.rubyPackages_3_4.rspec
             # This machine may have no display server at all, so the shell
             # carries one it can start itself: `xvfb-run ruby exe/<app>` both
             # launches the app and is how test/drive_*.rb is run.
@@ -214,7 +228,7 @@
             echo "Sudoku devshell — ruby $(ruby -e 'print RUBY_VERSION')"
             echo "run the app:   xvfb-run ruby exe/sudoku"
             echo "drive the app: xvfb-run ruby test/drive_*.rb"
-            echo "run the specs: ruby -e 'require \"rspec/core\"; exit RSpec::Core::Runner.run([\"--format\", \"progress\", \"--require\", \"spec_helper\", \"spec\"])'"
+            echo "run the specs: xvfb-run rspec"
           '';
         };
       });

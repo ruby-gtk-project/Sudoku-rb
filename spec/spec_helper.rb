@@ -16,7 +16,9 @@ begin
   end
 rescue LoadError => error
   # check the error message and re-raise when unexpected
-  raise error unless error.message.include?("kettle")
+  unless error.message.include?("kettle")
+    raise error
+  end
 end
 
 # External RSpec & related config
@@ -25,6 +27,13 @@ require "kettle/test/rspec"
 
 # This library
 require "sudoku/rb"
+
+Dir[File.join(
+  __dir__,
+  "support",
+  "**",
+  "*.rb",
+)].each { |file| require file }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

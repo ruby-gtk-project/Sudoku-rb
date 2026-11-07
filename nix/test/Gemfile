@@ -1,0 +1,14 @@
+# frozen_string_literal: true
+
+# TEST-ONLY gems for bundlerEnv in flake.nix. Separate from nix/Gemfile
+# (the app's runtime deps, packaged into the app closure) so kettle-test and
+# its dependency chain never ships inside packages.default — devShells.default
+# only.
+source "https://rubygems.org"
+
+gem "kettle-test"
+# spec_helper.rb's `require "sudoku/rb"` pulls in the whole app
+# (lib/sudoku.rb -> lib/sudoku/application.rb), so the test bundle needs the
+# same GTK bindings as nix/Gemfile, pinned to the same version.
+gem "adwaita", "4.3.9"
+gem "gtk4", "4.3.9"
