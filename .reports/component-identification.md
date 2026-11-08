@@ -1,38 +1,29 @@
-# Component identification — audit of the existing census
+# Component identification — audit of the existing census (re-verified)
 
 | | |
 |---|---|
-| Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `b0a9d76` |
+| Upstream | `main` @ `2be119d` (unchanged across this and the prior two rounds) |
+| Port | `ruby` @ `46c2887` |
 
-Upstream has not moved since the last round (`origin/main` is still `2be119d`),
-so `.reports/component-inventory.md`'s census is re-checked for drift against
-the port, not re-walked from zero. Re-spot-checked this round:
+`.reports/component-inventory.md`'s file-level census (13 UI-section files +
+11 non-UI files, 23 `lib/sudoku/*.rb` units excluding the non-census
+`rb.rb` entry point) was re-spot-checked against the current tree, not
+re-walked from zero, since upstream has not moved:
 
-- Every `lib/sudoku/<thing>.rb` the inventory names still exists.
-- The port gained one new file since the inventory was written,
-  `lib/sudoku/rb.rb` — the gem's `require "sudoku/rb"` entry point that
-  `spec/spec_helper.rb` needs. It is not a ported upstream unit (upstream has
-  no equivalent single-file entry point); it is build plumbing, correctly
-  outside the 13-UI/11-non-UI census.
-- `po/LINGUAS` still lists `de, fa, nl, vi, zh` — the previously-noted stale
-  blocker (ports omitting `de`) was already corrected before the last round
-  and remains correct.
-- The two msgids `.reports/translation-parity.md` found missing from
-  `po/sudokugame.pot` last round (`help_dialog.rb`'s two multi-line `_()`
-  calls) are now present in the pot and all five `.po` files — see
-  `.reports/translation-parity.md` for the verification.
+- `ls lib/sudoku/*.rb` still returns the same 25 files (23 census units +
+  `rb.rb` + `translations.rb`, both already accounted for in the inventory).
+- No new upstream `.py`/`.blp` file exists under `origin/main:src/` or
+  `origin/main:data/blueprints/` that lacks a `lib/sudoku/*.rb` counterpart.
+- The two latest commits (`69463f2`, `46c2887`) added **no new lib file** —
+  they added spec/driver coverage (`spec/log_utils_spec.rb`) and extended an
+  existing driver (`test/drive_game.rb`) for components that already had a
+  file but lacked verification. That is a `component-parity` fact, not a
+  `component-identification` one, and does not change the unit count here.
 
-No new upstream file was found missing a port-side counterpart. The unit list
-(13 UI sections + 11 non-UI files, 25 `lib/sudoku/*.rb` files total once
-`rb.rb` is excluded as non-census plumbing) is unchanged from last round.
-What changed this round is how much of that census has actual runtime
-verification behind it — that comparison is `component-parity`'s job, and the
-answer moved substantially since the last report (see
-`.reports/component-parity.md`): the port went from 0/6 upstream test files
-ported and an RSpec harness that could not load, to 113/113 example-for-example
-parity with upstream's own `def test_*` count, actually executed. The
-identification-level finding from last round (file existence ≠ parity) still
-holds and is still the right line to draw — it is just that more of the
-previously-"present-only" units now have axis-4/5 evidence behind them than
-they did.
+## Finding carried forward unchanged
+
+No missing `lib/*.rb` file was found this round either. The identification
+axis has been stable for three consecutive rounds: every upstream window,
+page, dialog, widget group and model file has a corresponding port file.
+**File existence is not behavioural parity** — see `component-parity.md` for
+the axis that still has an open gap (`style.rb`).

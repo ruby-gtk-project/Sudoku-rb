@@ -3,41 +3,26 @@
 | | |
 |---|---|
 | Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `b0a9d76` |
+| Port | `ruby` @ `46c2887` |
 | Upstream tests | 6 files, 113 `def test_*` methods total |
-| Ported | **113 of 113**, one Ruby `it` per upstream `def test_*`, same file grouping |
-| Suite actually runs | **yes** — re-run directly this round, not inferred |
+| Ported from upstream | **113 of 113**, one Ruby `it` per upstream `def test_*`, same file grouping (unchanged from last round — recounted this round, matches) |
+| Port-only additions (no upstream counterpart) | 8 — `spec/log_utils_spec.rb` |
+| Suite actually runs | **yes** — re-run directly this round |
 | Test command | `nix develop --command xvfb-run -a rspec` (the devshell banner's own command) |
 
-## This round's verification, independent of the commit message
-
-The commit that claims this (`a1192eb`, "Port the upstream RSpec suite and
-fix the devshell's test harness") says "113 examples, 0 failures". That claim
-was re-run from scratch this round rather than trusted:
+## Re-verified directly this round
 
 ```
 nix develop --command xvfb-run -a rspec
 # Randomized with seed ...
-# .................................................................................................................
-# Finished in 9.14 seconds (files took 8.09 seconds to load)
-# 113 examples, 0 failures
+# 121 examples, 0 failures
 ```
 
-Reproduces. This is a real change from the state the prior report recorded:
-previously `require "kettle/test/rspec"` raised `LoadError` before collecting
-a single example, because the devshell had no path to that gem. `a1192eb`
-added a separate test-only `nix/test/` bundlerEnv (kept out of
-`packages.default`'s closure) that resolves it, and added
-`lib/sudoku/rb.rb`, the entry point `spec/spec_helper.rb` requires
-(`require "sudoku/rb"`), which previously did not exist either. Both of
-those specific claims were checked by reading the files, not just by the
-suite now passing.
+121 = 113 (upstream-ported, unchanged census below) + 8 new examples in
+`spec/log_utils_spec.rb`, added in `46c2887` to close the zero-coverage gap
+the prior `component-parity.md` named for `lib/sudoku/log_utils.rb`.
 
-## File-by-file census, counted directly rather than at the file level only
-
-Last round's report explicitly stopped at a file-level count ("a full
-name-by-name census ... was not completed ... it should still be done before
-any of these are closed"). This round did it:
+## File-by-file census against upstream, recounted this round
 
 ```
 for f in test_board_conflicts test_board_core test_board_serialization \
@@ -56,51 +41,41 @@ done
 | `tests/test_preferences.py` | 24 | `spec/preferences_spec.rb` | 24 |
 | **Total** | **113** | | **113** |
 
-Every port spec names its `it` block after the upstream `def test_*` it was
-ported from (confirmed by reading all six spec files), so this is a real
-name-preserving 1:1 census, not a count that happens to match.
+Unchanged from the last round — upstream has not added or removed a test
+file or method since `2be119d`, and no port spec file ported from upstream
+was touched by `46c2887` (only the new, disclosed-as-new, `log_utils_spec.rb`
+was added, which maps to no upstream test file by design — see below).
 
-## The one deliberate substitution, and why it is not an excuse
+## `spec/log_utils_spec.rb` is new coverage, not a ported upstream test — and says so
 
-`tests/test_generator_contract.py` mocks `PuzzleGenerator.make_puzzle` (from
-the third-party `sudoku` PyPI package upstream depends on) and asserts which
-`sudoku_cls` keyword argument it was called with. The port's
-`lib/sudoku/generator.rb` has no such dependency to mock — it builds puzzles
-itself via its own `GridSolver`. `spec/generator_contract_spec.rb` keeps both
-upstream test names and keeps the "returns two 9×9 lists" shape assertion
-unchanged, and replaces the `sudoku_cls`-kwarg assertion with the port's own
-equivalent seam: which `extra_units` the variant's generator enforces (empty
-for Classic, the two main diagonals for Diagonal). This is documented in the
-spec file's own header comment, is a like-for-like behavioural substitution
-(same contract — "does this variant's generator enforce the right extra
-constraints" — checked through the port's actual API instead of a mock of a
-dependency the port doesn't have), and is not reported in this ledger as
-"ported" without comment — it is called out explicitly here and in the
-file.
+Its own header comment: "Upstream ships no dedicated test module for
+log_utils.py, so there is no 1:1 upstream test to port here; this closes the
+zero-coverage gap the component-parity report named for this unit." Read in
+full — the claim is accurate: `origin/main:tests/` has no `test_log_utils.py`
+and never did. This is legitimately new test coverage for a real upstream
+unit (`src/log_utils.py`) that had none to port, disclosed as such rather
+than silently inflated into the 113/113 upstream-parity count above.
+
+## The one deliberate substitution, unchanged from last round
+
+`tests/test_generator_contract.py` mocks a third-party `PuzzleGenerator` the
+port has no equivalent dependency for; `spec/generator_contract_spec.rb`
+substitutes an equivalent assertion against the port's own generator seam
+(`extra_units` per variant), disclosed in the spec file's own header and in
+this report. Re-confirmed present and unchanged this round.
 
 ## What is still not covered
 
-- No `PORTING.md` exists on `ruby` (checked again this round) — nothing to
-  cross-reference against a porting log, which is itself fine, but means
-  this report is the only record of the generator-contract substitution
-  above; it should not be allowed to drift from the spec file's own comment.
-- The two `test/drive_*.rb` scripts remain real integration smoke tests (not
-  unit tests) and are reported separately — see `.reports/component-parity.md`
-  for what they do and do not assert. They are not part of the 113/113 count
-  above and should not be added to it.
-- Upstream's `tests/conftest.py` fixture helpers (`make_board_state`, etc.)
-  were not ported as a shared file; each Ruby spec builds its own fixtures
-  inline or via a local `let`/helper. This was not checked for whether it
-  caused any duplicated-but-divergent fixture logic across the six spec
-  files — a structural tidiness question, not a parity gap, since all 113
-  examples pass.
+- No `PORTING.md` exists on `ruby` (checked again this round).
+- The two `test/drive_*.rb` scripts remain integration smoke tests, reported
+  separately in `component-parity.md`, and are correctly not folded into the
+  113/121 counts above.
+- Upstream's `tests/conftest.py` fixture helpers were not ported as a shared
+  file (unchanged finding, not a parity gap since all examples pass).
 
 ## Verdict
 
-Clean on this axis. 113 of 113 upstream unit tests have a named Ruby
-counterpart, the count matches at the individual-test level (not just the
-file level), and the suite was independently re-run this round and genuinely
-passes — `rspec` is no longer a command that fails before collecting a single
-example, which was last round's root finding. The one substitution
-(generator contract) is documented, behaviourally equivalent, and disclosed
-rather than hidden.
+Clean on the upstream-test-survival axis: 113 of 113 upstream unit tests
+still have a named Ruby counterpart, independently recounted this round, and
+the full suite (121 examples including the new, disclosed, non-upstream
+`log_utils_spec.rb`) was re-run from scratch and genuinely passes.
