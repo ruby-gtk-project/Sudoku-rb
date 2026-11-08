@@ -3,57 +3,113 @@
 | | |
 |---|---|
 | Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `46c2887` |
-| Units checked this round | 23 (of 25 `lib/sudoku/*.rb` files; `style.rb` and the non-census `rb.rb` are not driven) |
-| Units with zero coverage of any kind | 1 (`style.rb`) — down from 2 last round |
+| Port | `ruby` @ `e81851d` |
+| Runtime gate, re-run directly this round | `test/drive_game.rb` → `45 of 45 checks passed`, `DRIVE OK`. `test/drive_translations.rb` → `DRIVE OK` for de, fa, nl, vi, zh (5 × 9 = 45 `ok` lines, all 5 languages spot-checked against real translated strings, not just key presence). `rspec` → `140 examples, 0 failures`. |
 
-## What changed since the last round, re-run directly (not trusted from the commit message)
+## Three previously-named gaps, re-verified closed this round
 
-`46c2887` ("Close named parity gaps: log_utils coverage, popover badges/Done,
-dialog click path, illustration swap") claims to close four of the five gaps
-the prior `component-parity.md` named. Each was re-run from scratch:
-
-```
-nix develop --command xvfb-run -a ruby test/drive_game.rb          # DRIVE OK, 50 "ok" lines
-nix develop --command xvfb-run -a ruby test/drive_translations.rb  # DRIVE OK, 9 "ok" lines
-nix develop --command xvfb-run -a rspec                            # 121 examples, 0 failures
-```
-
-50 + 9 = 59 checks, matching this round's runtime gate (`drive_ok=true, 59
-checks, 0 failed, covering 23 components`) exactly. 121 = 113 (prior,
-upstream-ported) + 8 new (`spec/log_utils_spec.rb`, which has no upstream
-test to port against — see `test-parity.md`).
-
-| Named gap (prior round) | This round | Verified by |
+| Named gap (prior rounds) | This round | Verified by |
 |---|---|---|
-| `log_utils.rb` — zero coverage of any kind | **Closed.** 4 new examples cover `setup_logging`, buffer accumulation across multiple log calls, and the empty-before-setup state | `spec/log_utils_spec.rb`, read and re-run |
-| Popover badges, insensitive-at-zero, Done button unclicked | **Closed.** `test/drive_game.rb:277-312` forces a popover into a near-exhausted state, asserts a `corner-label` badge renders with a positive count, asserts the matching number button is insensitive at zero remaining, clicks "Done" via `signal_emit("clicked")`, and asserts the popover closes | re-read the driver code and re-ran it; all 6 new `ok` lines present |
-| `game_setup_dialog.rb`'s own Start-button click path bypassed | **Closed.** `test/drive_game.rb:136-140` now calls `dialog.start_button.signal_emit("clicked")` instead of calling `window.on_game_setup_selected` directly | re-read the driver code |
-| `finished_page.rb`'s dark/light illustration swap never driven | **Closed.** `test/drive_game.rb:384-392` forces `Adwaita::StyleManager.default.color_scheme` to `:force_light` then `:force_dark` and asserts the resolved `Gtk::Picture` file ends in `celebration-light.svg` / `celebration-dark.svg` respectively | re-read the driver code; both `ok` lines present in the re-run |
+| `style.rb` — zero coverage of any kind | **Closed.** `spec/style_spec.rb` (315 lines) parses both `Sudoku::Style::LIGHT`/`DARK` and upstream's `data/style.css`/`data/style-dark.css` into selector→declaration maps and diffs them selector-by-selector, plus exercises `.light_provider`/`.dark_provider`/`.install` against a real `Gtk::CssProvider` | Re-read the spec file; independently re-diffed the two stylesheets byte-for-byte myself (see below) rather than trusting the spec's own diff logic |
+| RTL mirroring and the ghost-click guard in `input_handler.rb` untested | **Closed.** `spec/input_handler_spec.rb` adds a `ghost click` describe block (left-click-held-with-right-button, right-held-with-left, middle-click-ignored) and an `RTL direction handling` block that injects `direction: -> { Gtk::TextDirection::RTL }` and asserts Left/Right mirror while Up/Down do not | Re-read the spec; both blocks present and exercised in the 140-example run |
+| Translated `msgstr` values for fa/nl/vi/zh never spot-checked | **Closed.** `test/drive_translations.rb` now drives all five catalogues (not just German), asserting on seven real translated strings per language (menu button, new-game button, tooltip text, difficulty label, dialog row, shortcut section, untranslated-message fallback) | Re-ran it directly; 45 `ok` lines, 9 per language × 5 |
 
-## What is still genuinely unverified
+I independently re-diffed the stylesheets rather than trust the new spec's
+own comparison logic:
 
-1. **`style.rb` — still zero coverage of any kind.** `grep -rn "Style\b"
-   spec test` returns nothing. Every CSS selector was confirmed present by
-   grep in a prior round (not re-checked this round, since neither the
-   upstream CSS nor `lib/sudoku/style.rb` changed), but no spec and no
-   driver step loads or asserts anything about the stylesheet, and no rule
-   body (colors, sizes, margins) has ever been diffed against
-   `data/style.css`/`data/style-dark.css`. This is the one remaining
-   zero-coverage unit of the 25.
-2. **RTL mirroring and the ghost-click filter in `input_handler.rb`** remain
-   untested on both sides (upstream's own `tests/test_input_handler.py` does
-   not test them either — a pre-existing upstream gap, not a port
-   regression, per the prior round's finding; unchanged this round since
-   neither side's input-handler code or tests moved).
-3. **Translated `msgstr` values for fa/nl/vi/zh** are not spot-checked by any
-   driver (only German is exercised by `test/drive_translations.rb`) — see
-   `translation-parity.md`.
+```sh
+nix develop --command xvfb-run -a ruby -e '
+require "./lib/sudoku/style"
+File.write("light.css", Sudoku::Style::LIGHT)
+File.write("dark.css",  Sudoku::Style::DARK)'
+diff data/style.css light.css        # one indentation line (tab vs 4 spaces), one blank line, trailing newline only
+diff data/style-dark.css dark.css    # trailing newline only
+```
+
+Both are a correspondence (whitespace-only), not a gap. CSS parity for the
+cell/grid/popover stylesheet is real, not an assertion I took on the spec's
+word.
+
+## New finding this round: upstream's App metadata has no port component at all
+
+Widening `component-identification` to upstream's whole `data/` tree (not
+just `data/blueprints/`) found two upstream files with no port counterpart:
+
+### `data/io.github.sepehr_rs.Sudoku.metainfo.xml.in` → — (missing)
+
+Upstream's `src/application.py#on_about_action` reads the **installed**
+metainfo file at runtime, extracts the `<release>` entry whose `version`
+matches the running app, and feeds its `<description>` into
+`Adw.AboutDialog(release_notes=...)` — a "What's New" section in the About
+dialog (`src/application.py:89-125`).
+
+The port's `about_dialog` (`lib/sudoku/application.rb:83-95`) builds the same
+`Adwaita::AboutDialog` with the same name/icon/developers/copyright/license/
+issue URL, but never sets `release_notes`, and there is no metainfo file in
+the tree for any such lookup to read even if the code existed. This is a
+**gap**: a real section of the About dialog (release notes for the running
+version) that the port cannot show under any circumstance, because neither
+the data nor the code path exists.
+
+| Widget | Upstream | Port | Verdict |
+|---|---|---|---|
+| `Adw.AboutDialog` | built with `release_notes=` populated from the installed metainfo | built without `release_notes` | **gap** |
+
+### `data/io.github.sepehr_rs.Sudoku.desktop.in` → — (missing)
+
+No desktop entry file exists in the port tree at all — no launcher name,
+`GenericName`, `Comment`, `Keywords`, or `Icon` key for a system to use for
+search/launch integration (`data/io.github.sepehr_rs.Sudoku.desktop.in`
+upstream). This is packaging metadata rather than a widget, but it is a real
+upstream component with user-visible text (`Comment=Solve Sudoku puzzles`)
+that the port has nowhere to put. **Gap.**
+
+### `src/application.py#generate_debug_info` vs `lib/sudoku/application.rb#debug_info`
+
+A smaller, related finding while reading the same file on both sides:
+upstream's debug info includes a `Dist: <PRETTY_NAME>` line on Linux
+(`platform.freedesktop_os_release()['PRETTY_NAME']`); the port's `debug_info`
+(`lib/sudoku/application.rb:99-110`) has no equivalent line. Minor, but it is
+a line of the Troubleshooting report a Linux user sees upstream and does not
+see in the port. **Gap**, narrow.
+
+## Everything else checked this round (read, not re-scanned, since unchanged)
+
+- `GridSolver`/`PuzzleGenerator` (`lib/sudoku/generator.rb`) is a from-scratch
+  reimplementation of the behaviour the upstream `sudoku` PyPI package
+  provides (there is no Ruby package to port), including the forked-worker
+  timeout upstream gets from `multiprocessing` (`generate_in_worker`,
+  `collect_worker_result` mirror `CoreSudokuGenerator.generate`/
+  `_generate_worker`/the `TimeoutError`/`RuntimeError` pair). Correspondence,
+  not a gap — read in full this round, not assumed from the file's own
+  comment.
+- `shortcuts_dialog.rb` matches `data/blueprints/shortcuts-dialog.blp`
+  exactly: 4 sections, 10 items, same titles, same accelerators, each
+  wrapped in the same `p_("shortcut window", ...)` / `C_("shortcut
+  window", ...)` context both sides use.
+- `preferences_page.rb`'s `VariantPreferencesPage`/`GeneralPreferencesPage`
+  build their `Adw.ActionRow`/`Gtk.Switch`/`Adw.SpinRow` rows in a loop over
+  the same preference dicts upstream loops over — a shared-factory pattern
+  (`component-identification`'s Step 4 caveat), not the 3-ActionRow-vs-1 gap
+  the raw scan count suggested before reading the file.
+- `game_setup_dialog.rb`'s two `Gtk.ListBox`es (`variant_list`,
+  `difficulty_list`) both come from one `boxed_list` factory method, called
+  twice — again a shared factory, not a missing ListBox.
+- `CellFeedback` in `sudoku_cell.rb` is the port of `src/shared/utils.py`'s
+  `schedule_feedback_clear`/`clear_cell_feedback` (it uses
+  `add_css_class`/`remove_css_class` where upstream calls
+  `get_style_context().add_class`/`remove_class` — same behaviour, newer
+  GTK4 API on both ends since upstream's own style-context calls are the
+  older spelling of the same operation).
 
 ## Verdict
 
-Not clean. Four of the five previously-named gaps are now genuinely closed,
-each confirmed by independently re-running the driver and reading the new
-assertions rather than trusting the commit message. One real, if narrow,
-zero-coverage unit remains (`style.rb`), plus the two smaller named gaps
-above (upstream-inherited input-handler paths, non-English `msgstr` values).
+**Not clean.** Three gaps named in prior rounds are genuinely closed this
+round, each independently re-verified rather than taken from a commit
+message. Two new, real gaps were found by widening the identification scan
+beyond `src/`/`data/blueprints/` to upstream's whole `data/` directory: the
+port has no AppStream metainfo file and no `.desktop` file, which means the
+About dialog's release-notes section can never render (the lookup has
+nothing to read even if it were built), and the system has no desktop-entry
+metadata at all. A third, narrower gap (`debug_info` missing the Linux
+distribution line) was found reading the same file.

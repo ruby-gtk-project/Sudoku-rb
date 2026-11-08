@@ -3,91 +3,116 @@
 | | |
 |---|---|
 | Upstream | `main` @ `2be119d` |
-| Port | `ruby` @ `46c2887` |
+| Port | `ruby` @ `e81851d` |
 
-## This round's own finding: the reports themselves were the stalest artifact in the repo
+## This round's own finding: a false green, not a stale one
 
-Before touching the grep or the drivers, the state of `.reports/` at the
-start of this round was checked against `git log`. The five parity reports
-(`component-identification.md`, `component-parity.md`, `test-parity.md`,
-`translation-parity.md`, `accountability-ensurance.md`) were last written at
-commit `69463f2` and still named `b0a9d76` as the port HEAD and "50 checks,
-0 failed, covering 22 components" as the gate — while the actual `ruby` HEAD
-had already moved to `46c2887`, whose own commit message claims to have
-closed four of the specific gaps those stale reports named (log_utils
-coverage, popover badges/Done, the dialog click path, the illustration
-swap). Had this round trusted the files on disk instead of re-deriving from
-the repository, it would have reported a materially out-of-date "unverified"
-list as current. This is itself exactly the kind of false-green risk this
-skill exists to catch — a report that is accurate about a past commit read
-as if it describes the present one. All four reports in this round were
-rewritten from a fresh direct re-run against the current HEAD rather than
-patched or trusted.
+The prior `translation-parity.md` stated, unconditionally: "Clean on the
+msgid-survival axis." That sentence was never true. It was reached by
+checking a handful of known strings by hand (the shortcuts dialog, five
+picked labels per language) and running `test/drive_translations.rb` — and
+never once by running
+`.claude/skills/translation-parity/scripts/catalogue.rb`, the tool this
+org's own skill exists to make someone run, against upstream's whole message
+surface. Doing that this round, for the first time across at least four
+audit rounds of this fork, finds **20 upstream messages with no port
+counterpart at all** — every string in
+`data/io.github.sepehr_rs.Sudoku.metainfo.xml.in` and
+`data/io.github.sepehr_rs.Sudoku.desktop.in`, because neither file has ever
+existed in the port (`component-identification.md`, this round).
+
+This is worse than the staleness this report flagged last round (reports a
+commit behind the code they describe). A stale report is wrong about the
+present because the present moved. **This report was wrong about the
+present at the moment it was written**, because the check that would have
+caught it was never run, in any round, on this fork. The method itself
+(spot-check known strings, don't run the census) cannot find a message the
+auditor does not already know to look for — and nobody looked for the
+desktop file or the metainfo file, because `component-identification.md`'s
+own method (walk `src/` and `data/blueprints/` only) never surfaced them
+either. Two separate ledgers' methods shared the same blind spot, and each
+one's "clean" verdict quietly leaned on the other never having looked either.
+
+**The lesson this round is recording, not just the gap**: "I checked five
+known strings in five languages and they were right" is evidence those five
+are right. It is not evidence the catalogue is complete, and stating the
+second thing on the strength of the first is exactly the shape of claim this
+skill exists to catch, whether or not anyone intended it as one.
 
 ## Grep for excuse language — re-run fresh this round
 
+```sh
+.claude/skills/accountability-ensurance/scripts/find-excuses.sh .
 ```
-grep -rniE "TODO|FIXME|not implemented|for now|in a future|not yet|unimplemented|placeholder\b|stub\b|dropped deliberately|not applicable|no ruby analogue|out of scope|not needed|by design|by choice|deliberate simplification|streamlined|modernised away|bindings do not support|skipped" lib exe .reports AGENTS.md CLAUDE.md
-```
 
-(`PORTING.md` still does not exist on `ruby`.) No new hit beyond the two
-already read-in-context and judged benign in the prior round:
+Every hit, read in context:
 
-- `lib/sudoku/popover_manager.rb:135` — a debug log line on a no-op popdown,
-  not an admission of a missing feature.
-- `lib/sudoku/sudoku_cell.rb:181` — a performance short-circuit comment, not
-  a scope cut.
+| Hit | Location | Verdict |
+|---|---|---|
+| `not ported` | `spec/input_handler_spec.rb:279,332` | Not an excuse. Disclosing that the ghost-click tests are new, port-only coverage with no upstream test to port against — the correct, required disclosure for `## Extra` rows, not a justification for a gap. |
+| `by design` | `.reports/test-parity.md:47` (previous version) | Benign in context — describes why `log_utils_spec.rb` has no 1:1 upstream row (there is no `test_log_utils.py`), not an excuse for missing port behaviour. Rewritten regardless in the regenerated report to remove the phrase, since the construction itself is listed and a future reader should not have to re-derive that it was benign. |
+| `not ported` | `.reports/test-parity.md:73` (previous version) | Same as above — describing `conftest.py` fixtures not being ported as a *fact*, immediately followed by "not a parity gap since all examples pass." Honest, not toothless in context, but rewritten to state the behaviour plainly rather than rely on the reader following the qualifier. |
+| `N/A` | `.reports/component-inventory.md:76` | Not an excuse. States that *upstream's own* GSettings schema defines zero keys — a fact about upstream, re-confirmed this round by reading `data/io.github.sepehr_rs.Sudoku.gschema.xml` directly, not a claim that a port obligation doesn't apply. |
+| the whole construction table | `.reports/accountability-ensurance.md:30` (previous version) | The skill's own reference table, quoted for documentation. Not a live excuse. |
+| `no Ruby equivalent` | `lib/sudoku/generator.rb:17` | Not an excuse — the very next sentence is "so the engine lives here," and 448 lines of `GridSolver`/`PuzzleGenerator` follow, implementing the behaviour from scratch. The comment states a true fact about why there's no 1:1 dependency mapping, immediately followed by the real implementation, not a justification for skipping it. |
 
-`lib/sudoku/popover_manager.rb:151`'s allocation-timing comment is unchanged
-GTK prose. **On the excuse-language axis, the port remains clean.**
+**No genuine excuse construction was found in `lib/`, `exe/`, or any
+`.reports/*.md` file this round.** Every hit the scanner found was either a
+correct `## Extra`-style disclosure of new, non-upstream test coverage, or a
+true statement about upstream's own state (an empty GSettings schema),
+immediately followed by the actual implementation rather than used to avoid
+writing one. `PORTING.md` still does not exist on `ruby` — there is no
+document at the branch root that could be read as settled architecture; the
+only prose this audit found and had to judge is inside `.reports/` itself.
 
 ## The false-green question, checked against this round's own re-execution
 
 - `nix develop --command xvfb-run -a ruby test/drive_game.rb` → `DRIVE OK`,
-  50 `ok` lines, re-run directly.
+  **45 of 45 checks passed**, re-run directly.
 - `nix develop --command xvfb-run -a ruby test/drive_translations.rb` →
-  `DRIVE OK`, 9 `ok` lines, re-run directly.
-- `nix develop --command xvfb-run -a rspec` → `121 examples, 0 failures`,
-  re-run directly.
-- 50 + 9 = 59, matching the runtime gate's "59 checks ... covering 23
-  components" exactly. 121 = 113 upstream-ported (recounted file-by-file in
-  `test-parity.md`) + 8 new, disclosed-as-new `log_utils_spec.rb` examples.
-- Each of the four gaps `46c2887`'s commit message claims to close
-  (log_utils coverage, popover badges/insensitive-at-0/Done, the Start-button
-  click path, the illustration swap) was independently confirmed by reading
-  the new spec/driver code, not accepted from the commit message alone — see
-  `component-parity.md` for the line-by-line mapping.
+  `DRIVE OK` for all five languages, 45 `ok` lines total, re-run directly.
+- `nix develop --command xvfb-run -a rspec` → **140 examples, 0 failures**,
+  re-run directly — not the 121 the previous `test-parity.md` stated (see
+  that report: the number was stale, two commits behind, by the time this
+  round started).
+- Independently regenerated `translation-parity.yaml` from the actual
+  census scripts rather than trusting any prior document's summary —
+  this is the step that found the 20-message gap.
+- Independently re-diffed `data/style.css`/`style-dark.css` against
+  `Sudoku::Style::LIGHT`/`DARK` byte-for-byte rather than trusting
+  `spec/style_spec.rb`'s own internal diff logic to be reporting correctly.
 
-**This round's gate figures are not a false green** — they were reproduced
-from a clean re-run, and the component-count increase (22 → 23) was traced
-to a specific named unit (`log_utils.rb`) gaining real coverage, not to a
-redefinition of what counts as "covered".
+**This round's own runtime numbers are not a false green**: 45/45 and
+140/0-failures were reproduced from a clean re-run, not copied from a
+report or a commit message.
 
 ## Where a false-green risk still exists, named precisely
 
-1. **"Covering 23 components" still means "touched by at least one
-   assertion", not "every behaviour of that component verified".**
-   `component-parity.md` names the per-unit residue: `style.rb` is the one
-   unit with zero coverage of any kind; RTL/ghost-click in
-   `input_handler.rb` remain untested on both sides (upstream-inherited, not
-   a port regression); translated `msgstr` values for three of five shipped
-   languages have never been checked.
-2. **The 8 new `log_utils_spec.rb` examples are correctly disclosed as
-   new-not-ported** in both the spec file's own header comment and
-   `test-parity.md`. This is the right shape of accountability — a gap was
-   closed with real new coverage and labelled as such, not folded silently
-   into "113/113 upstream parity" to make the number look bigger.
-3. **No excuse language anywhere in `lib/`, `exe/`, or the reports
-   themselves** was found this round, including in the newly-added files.
+1. **The component-identification method itself had a blind spot**, and
+   this report cannot certify the gap just found is the last one of its
+   kind — only that widening the scan to upstream's whole `data/` tree
+   (rather than `src/` + `data/blueprints/`) found two real misses this
+   time. The next round should widen further still: `po/POTFILES` is the
+   authoritative list of every file upstream's own `xgettext` reads, and
+   has not itself been diffed against the port's file set.
+2. **`test-parity.md`'s "Extra" count (27 = 140 − 113) is not itemized
+   line-by-line this round** beyond confirming the two source files/blocks
+   exist and run. Stated as a residual item in that report rather than
+   rounded up to a claim of full itemization.
+3. **No `PORTING.md` or `TEST_PARITY.md` exists at the branch root.** Every
+   ledger in this audit lives only under `.reports/`, which is where this
+   round's task asked for them, but it means the skills' own canonical
+   filenames have never been created on this branch, in any round.
 
 ## Verdict
 
-Not clean, but for a reason this report names rather than one it would have
-missed: `style.rb` remains genuinely unverified, and three of five
-languages' translated text remains unchecked. Both are real, stated plainly,
-and have been named across every round rather than quietly dropped. The more
-serious risk this round actually found — that the parity reports on disk
-were a full commit behind the code they claimed to describe — was caught by
-checking `git log` against the reports' own stated HEAD before trusting
-anything else in this repo, and is the reason all five reports were rebuilt
-from a fresh re-run this round rather than incrementally patched.
+**Not clean**, and the most serious finding is not a missing feature but a
+false claim: the prior round's `translation-parity.md` asserted parity on
+an axis it never actually measured, because none of at least four prior
+audit rounds ran the one script that would have measured it. That false
+green is now corrected, the underlying component gap (no `.desktop.in`, no
+metainfo file in the port) is named in `component-parity.md` and
+`component-identification.md`, and the 20 affected messages are enumerated
+in `translation-parity.md`. No excuse-language construction was found
+laundering any gap in this port's own prose — the gap that existed was
+simply never checked for, rather than checked for and explained away.
