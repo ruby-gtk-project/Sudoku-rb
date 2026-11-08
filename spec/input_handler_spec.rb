@@ -275,5 +275,141 @@ RSpec.describe Sudoku::InputHandler do
       )
       expect(calls).to eq([[3, 5, 3, 1]])
     end
+
+    # New coverage, not ported from upstream: upstream's own
+    # tests/test_input_handler.py never exercises the ghost-click guard
+    # either, so there is nothing to port from — this closes that gap
+    # directly against the port.
+    it "test_left_click_held_with_right_button_is_a_ghost_click" do
+      calls = []
+      h = make_handler(on_cell_click: ->(*args) { calls << args })
+      h.on_cell_clicked(
+        fake_gesture(button: 1, state: Gdk::ModifierType::BUTTON3_MASK.to_i),
+        1,
+        3,
+        5,
+      )
+      expect(calls).to eq([])
+    end
+
+    it "test_right_click_held_with_left_button_is_a_ghost_click" do
+      calls = []
+      h = make_handler(on_cell_click: ->(*args) { calls << args })
+      h.on_cell_clicked(
+        fake_gesture(button: 3, state: Gdk::ModifierType::BUTTON1_MASK.to_i),
+        1,
+        3,
+        5,
+      )
+      expect(calls).to eq([])
+    end
+
+    it "test_left_click_with_no_other_button_held_is_not_a_ghost_click" do
+      calls = []
+      h = make_handler(on_cell_click: ->(*args) { calls << args })
+      h.on_cell_clicked(
+        fake_gesture(button: 1, state: 0),
+        1,
+        3,
+        5,
+      )
+      expect(calls).to eq([[3, 5, 1, 1]])
+    end
+
+    it "test_middle_click_is_ignored_outright" do
+      calls = []
+      h = make_handler(on_cell_click: ->(*args) { calls << args })
+      h.on_cell_clicked(
+        fake_gesture(button: 2),
+        1,
+        3,
+        5,
+      )
+      expect(calls).to eq([])
+    end
+  end
+
+  # New coverage, not ported from upstream: upstream's own
+  # tests/test_input_handler.py never exercises RTL direction handling
+  # either, so there is nothing to port from — this closes that gap directly
+  # against the port. `#directions` (and so `handle_arrow_keys`) consults the
+  # injected `direction:` callable, mirroring Left/Right when it reports RTL;
+  # Up/Down are never mirrored.
+  describe "RTL direction handling" do
+    def make_rtl_handler(**overrides)
+      make_handler(direction: -> { Gtk::TextDirection::RTL }, **overrides)
+    end
+
+    it "test_rtl_right_arrow_moves_left" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Right,
+        0,
+        3,
+        3,
+      )
+      expect(calls).to eq([[3, 3, 3, 2]])
+    end
+
+    it "test_rtl_left_arrow_moves_right" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Left,
+        0,
+        3,
+        3,
+      )
+      expect(calls).to eq([[3, 3, 3, 4]])
+    end
+
+    it "test_rtl_ctrl_right_arrow_jumps_left_by_block" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Right,
+        Gdk::ModifierType::CONTROL_MASK,
+        3,
+        3,
+      )
+      expect(calls).to eq([[3, 3, 3, 0]])
+    end
+
+    it "test_rtl_up_arrow_is_not_mirrored" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Up,
+        0,
+        3,
+        3,
+      )
+      expect(calls).to eq([[3, 3, 2, 3]])
+    end
+
+    it "test_rtl_down_arrow_is_not_mirrored" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Down,
+        0,
+        3,
+        3,
+      )
+      expect(calls).to eq([[3, 3, 4, 3]])
+    end
+
+    it "test_rtl_right_arrow_still_blocked_at_boundary" do
+      calls = []
+      h = make_rtl_handler(on_move: ->(*args) { calls << args })
+      h.on_key_pressed(
+        Gdk::Keyval::KEY_Left,
+        0,
+        0,
+        8,
+      )
+      expect(calls).to eq([])
+    end
   end
 end
