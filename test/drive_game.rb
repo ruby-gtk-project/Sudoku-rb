@@ -14,6 +14,9 @@ ENV["XDG_DATA_HOME"] = Dir.mktmpdir("sudoku-drive")
 $LOAD_PATH.unshift(File.expand_path("../lib", __dir__))
 require "sudoku"
 
+SHOTS = File.expand_path("../tmp/shots", __dir__)
+FileUtils.rm_rf(SHOTS)
+
 # Runs a list of steps on the main loop, one per tick, and reports each one.
 # A wait step is re-queued until its condition holds, so the loop keeps running
 # while the generator's worker finishes.
@@ -37,12 +40,38 @@ class Driver
   end
 
   def check(name, value)
+    @checks ||= 0
+    @checks += 1
     if value
       puts "ok   #{name}"
     else
       puts "FAIL #{name}"
       @failures << name
     end
+  end
+
+  # Writes a PNG of `widget` under tmp/shots/. GTK4 has no screenshot call;
+  # the route that works headlessly is to paint the widget into a render
+  # node and hand that to a renderer, which returns a texture that knows how
+  # to write a PNG.
+  def shot(name, widget)
+    FileUtils.mkdir_p(SHOTS)
+    path = File.join(SHOTS, "#{name}.png")
+    renderer = Gsk::CairoRenderer.new
+    renderer.realize(nil)
+    begin
+      snapshot = Gtk::Snapshot.new
+      Gtk::WidgetPaintable.new(widget).snapshot(snapshot, widget.width, widget.height)
+      node = snapshot.to_node
+      raise "widget produced no render node" if node.nil?
+
+      renderer.render_texture(node, nil).save_to_png(path)
+      puts "    shot #{path}"
+    ensure
+      renderer.unrealize
+    end
+  rescue StandardError => e
+    puts "    shot #{name} failed: #{e.class}: #{e.message}"
   end
 
   def run
@@ -96,6 +125,8 @@ class Driver
     end
 
     def report
+      puts
+      puts "#{(@checks || 0) - @failures.length} of #{@checks || 0} checks passed"
       if @failures.empty?
         puts "DRIVE OK"
       else
@@ -132,6 +163,7 @@ driver
     window = application.window
     driver.check("main menu showing", window.stack.visible_child == window.main_menu_box)
     driver.check("new game button there", !window.new_game_button.nil?)
+    driver.shot("01-main-menu", window)
   end
   .step("open the new game dialog and start via its own Start Game button") do
     Sudoku::GameSetupDialog.new(window.method(:on_game_setup_selected)).tap do |dialog|
@@ -146,6 +178,7 @@ driver
     driver.check("game page showing", window.stack.visible_child == window.game_scrolled_window)
     driver.check("board built", !window.controller.board.nil?)
     driver.check("81 cells", window.controller.grid_manager.cells.flatten.length == 81)
+    driver.shot("02-grid", window)
   end
   .step("fill one cell correctly") do
     row, col = first_blank.call
@@ -250,6 +283,7 @@ driver
     popover = window.controller.popover_manager.get_or_create_popover
     remaining = board.get_remaining_valid_inputs
     driver.check("remaining valid inputs is a 9-entry count", remaining.size == 9)
+    driver.shot("03-popover", window)
     correct = board.get_correct_value(row, col)
     window.controller.popover_manager.on_number_selected(correct.to_s, cell, popover, 1)
     driver.check("popover number selection filled the cell", cell.value == correct)
@@ -380,6 +414,7 @@ driver
   .step("finished page") do
     driver.check("finished page showing", window.stack.visible_child == window.finished_page)
     driver.check("save cleared", !Sudoku::Persistence.saved_game?)
+    driver.shot("04-finished", window)
   end
   .step("finished page illustration swaps with the colour scheme") do
     manager = Adwaita::StyleManager.default
@@ -417,6 +452,7 @@ driver
   end
   .step("game over page") do
     driver.check("game over page showing", window.stack.visible_child == window.game_over_page)
+    driver.shot("05-game-over", window)
   end
   .run
 
